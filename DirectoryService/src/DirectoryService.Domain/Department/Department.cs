@@ -6,6 +6,9 @@ namespace DirectoryService.Domain.Department;
 
 public class Department
 {
+    // EF core
+    private Department() { }
+
     private List<Department> _childDepartments = [];
 
     private List<DepartmentLocation> _departmentsLocations = [];
@@ -70,7 +73,7 @@ public class Department
         IEnumerable<DepartmentLocation> locations,
         IEnumerable<DepartmentPosition> positions)
     {
-        return new Department(id, departmentName, identifier, path, depth, parentId, childDepartments, locations, positions);
+        return new Department(id, departmentName, identifier, path, depth, parentId, childDepartments , locations, positions);
     }
 
 
