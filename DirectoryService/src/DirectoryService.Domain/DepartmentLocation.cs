@@ -4,6 +4,9 @@ namespace DirectoryService.Domain;
 
 public class DepartmentLocation
 {
+    // EF core
+    private DepartmentLocation() { }
+
     private DepartmentLocation(Guid departmentId, Guid locationId)
     {
         Id = Guid.NewGuid();

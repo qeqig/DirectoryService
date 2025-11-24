@@ -1,0 +1,37 @@
+﻿using DirectoryService.Domain;
+using DirectoryService.Domain.Department;
+using DirectoryService.Domain.Location;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace DirectoryService.Infrastructure.Configurations;
+
+public class DepartmentLocationConfiguration : IEntityTypeConfiguration<DepartmentLocation>
+{
+    public void Configure(EntityTypeBuilder<DepartmentLocation> builder)
+    {
+        builder.ToTable("department_locations");
+
+        builder.HasKey(d => d.Id).HasName("pk_department_locations");
+
+        builder.Property(d => d.Id).HasColumnName("id");
+
+        builder.Property(d => d.DepartmentId).HasColumnName("department_id");
+
+        builder.Property(d => d.LocationId).HasColumnName("location_id");
+
+        builder
+            .HasOne<Department>()
+            .WithMany(d => d.Locations)
+            .HasForeignKey(d => d.DepartmentId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .HasConstraintName("fk_department_locations_department_id");
+
+        builder
+            .HasOne<Location>()
+            .WithMany(l => l.Departments)
+            .HasForeignKey(l => l.LocationId)
+            .OnDelete(DeleteBehavior.Cascade)
+            .HasConstraintName("fk_department_locations_location_id");
+    }
+}

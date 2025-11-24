@@ -1,0 +1,80 @@
+﻿using DirectoryService.Domain;
+using DirectoryService.Domain.Department;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+namespace DirectoryService.Infrastructure.Configurations;
+
+public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
+{
+    public void Configure(EntityTypeBuilder<Department> builder)
+    {
+        builder.ToTable("departments");
+
+        builder.HasKey(d => d.Id).HasName("pk_departments");
+
+        builder.Property(d => d.Id)
+            .HasColumnName("id");
+
+        builder.ComplexProperty(d => d.DepartmentName, nb =>
+        {
+            nb.Property(v => v.Value)
+                .IsRequired()
+                .HasMaxLength(LengthConstant.LENGTH_500)
+                .HasColumnName("name");
+        });
+
+        builder.ComplexProperty(d => d.Identifier, nb =>
+        {
+            nb.Property(v => v.Value)
+                .IsRequired()
+                .HasMaxLength(LengthConstant.LENGTH_500)
+                .HasColumnName("identifier");
+        });
+
+        builder.Property(d => d.ParentId)
+            .IsRequired(false)
+            .HasColumnName("parent_id")
+            .HasConversion(
+                value => value!.Value,
+                value => value);
+
+        builder.ComplexProperty(d => d.Path, nb =>
+            {
+                nb.Property(v => v.Value)
+                    .IsRequired()
+                    .HasMaxLength(LengthConstant.LENGTH_500)
+                    .HasColumnName("path");
+            });
+
+        builder.Property(d => d.Depth)
+            .IsRequired()
+            .HasColumnName("depth");
+
+        builder.Property(d => d.IsActive)
+            .IsRequired()
+            .HasColumnName("is_active");
+
+        builder.HasMany(d => d.ChildDepartments)
+            .WithOne()
+            .IsRequired(false)
+            .HasForeignKey(d => d.ParentId)
+            .OnDelete(DeleteBehavior.Restrict);
+
+        builder.HasMany(d => d.Locations)
+            .WithOne()
+            .HasForeignKey(d => d.Id);
+
+        builder.HasMany(d => d.Positions)
+            .WithOne()
+            .HasForeignKey(d => d.Id);
+
+        builder.Property(d => d.CreatedAt)
+            .IsRequired()
+            .HasColumnName("created_at");
+
+        builder.Property(d => d.UpdatedAt)
+            .IsRequired()
+            .HasColumnName("updated_at");
+    }
+}

@@ -5,6 +5,9 @@ namespace DirectoryService.Domain.Position;
 
 public class Position
 {
+    // EF core
+    private Position() { }
+
     private Position(
         Guid id,
         PositionName name,

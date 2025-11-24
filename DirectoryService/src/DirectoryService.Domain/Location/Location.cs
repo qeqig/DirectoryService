@@ -5,6 +5,9 @@ namespace DirectoryService.Domain.Location;
 
 public class Location
 {
+    // EF core
+    private Location() { }
+
     private List<DepartmentLocation> _departments = [];
 
     private Location(
