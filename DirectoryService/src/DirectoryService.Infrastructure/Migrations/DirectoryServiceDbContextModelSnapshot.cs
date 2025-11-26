@@ -142,7 +142,6 @@ namespace DirectoryService.Infrastructure.Migrations
             modelBuilder.Entity("DirectoryService.Domain.Location.Location", b =>
                 {
                     b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("uuid")
                         .HasColumnName("id");
 

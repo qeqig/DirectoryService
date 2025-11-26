@@ -1,21 +1,19 @@
 ﻿using DirectoryService.Domain.Department;
+using DirectoryService.Domain.Location;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 
 namespace DirectoryService.Infrastructure;
 
-public class DirectoryServiceDbContext : DbContext
+public class DirectoryServiceDbContext (IConfiguration configuration) : DbContext
 {
-    private readonly string _connectionString;
-
-    public DirectoryServiceDbContext(string connectionString)
-    {
-        _connectionString = connectionString;
-    }
+    private const string DATABASE = "DirectoryServiceDb";
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(_connectionString);
+        optionsBuilder.UseNpgsql(configuration.GetConnectionString(DATABASE));
+        optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -23,5 +21,12 @@ public class DirectoryServiceDbContext : DbContext
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(DirectoryServiceDbContext).Assembly);
     }
 
+    private ILoggerFactory CreateLoggerFactory()
+    {
+        return LoggerFactory.Create(builder => builder.AddConsole());
+    }
+
     public DbSet<Department> Departments => Set<Department>();
+
+    public DbSet<Location> Locations => Set<Location>();
 }

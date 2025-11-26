@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using DirectoryService.Domain.Location.VO;
 
 namespace DirectoryService.Domain;
 
@@ -7,7 +8,7 @@ public class DepartmentLocation
     // EF core
     private DepartmentLocation() { }
 
-    private DepartmentLocation(Guid departmentId, Guid locationId)
+    private DepartmentLocation(Guid departmentId, LocationId locationId)
     {
         Id = Guid.NewGuid();
         DepartmentId = departmentId;
@@ -18,13 +19,5 @@ public class DepartmentLocation
 
     public Guid DepartmentId { get; private set; }
 
-    public Guid LocationId { get; private set; }
-
-    public static Result<DepartmentLocation> Create(Guid departmentId, Guid locationId)
-    {
-        if (departmentId == Guid.Empty || locationId == Guid.Empty)
-            return Result.Failure<DepartmentLocation>("Department Id and Location Id cannot be empty");
-
-        return new DepartmentLocation(departmentId, locationId);
-    }
+    public LocationId LocationId { get; private set; }
 }
