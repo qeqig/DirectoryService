@@ -3,28 +3,27 @@ using DirectoryService.Domain.Location.VO;
 
 namespace DirectoryService.Domain.Location;
 
-public class Location
+public class Location : Entity<LocationId>
 {
     // EF core
-    private Location() { }
+    private Location(LocationId id)
+        : base(id) { }
 
     private List<DepartmentLocation> _departments = [];
 
     private Location(
-        Guid id,
+        LocationId id,
         LocationName locationName,
         LocationAddress address,
-        LocationTimezone locationTimezone,
-        IEnumerable<DepartmentLocation> departments)
+        LocationTimezone locationTimezone
+        /*IEnumerable<DepartmentLocation> departments*/)
+        : base(id)
     {
-        Id = id;
         LocationName = locationName;
         Address = address;
         LocationTimezone = locationTimezone;
-        _departments = departments.ToList();
+        //_departments = departments.ToList();
     }
-
-    public Guid Id { get; private set; }
 
     public LocationName LocationName { get; private set; }
 
@@ -41,12 +40,12 @@ public class Location
     public DateTime UpdatedAt { get; private set; }
 
     public static Result<Location> Create(
-        Guid id,
         LocationName locationName,
         LocationTimezone locationTimezone,
-        LocationAddress address,
-        IEnumerable<DepartmentLocation> departments)
+        LocationAddress address
+        /*,IEnumerable<DepartmentLocation> departments*/)
     {
-        return new Location(id, locationName, address, locationTimezone, departments);
+        var newLocationId = LocationId.Create();
+        return new Location(newLocationId, locationName, address, locationTimezone/*, departments*/);
     }
 }

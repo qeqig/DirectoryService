@@ -1,5 +1,6 @@
 ﻿using DirectoryService.Domain;
 using DirectoryService.Domain.Location;
+using DirectoryService.Domain.Location.VO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,7 +14,11 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
 
         builder.HasKey(l => l.Id).HasName("pk_locations");
 
-        builder.Property(l => l.Id).HasColumnName("id");
+        builder.Property(l => l.Id)
+            .HasConversion(
+                l => l.Value,
+                id => LocationId.Current(id))
+            .HasColumnName("id");
 
         builder.ComplexProperty(l => l.LocationName, nb =>
         {
