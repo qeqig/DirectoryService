@@ -1,5 +1,6 @@
 ﻿using DirectoryService.Domain;
 using DirectoryService.Domain.Position;
+using DirectoryService.Domain.Position.VO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -13,7 +14,11 @@ public class PositionConfiguration : IEntityTypeConfiguration<Position>
 
         builder.HasKey(p => p.Id).HasName("pk_positions");
 
-        builder.Property(p => p.Id).HasColumnName("id");
+        builder.Property(p => p.Id).HasColumnName("id")
+            .HasConversion(
+                p => p.Value,
+                id => PositionId.Current(id))
+            .HasColumnName("id");
 
         builder.ComplexProperty(p => p.Name, nb =>
         {

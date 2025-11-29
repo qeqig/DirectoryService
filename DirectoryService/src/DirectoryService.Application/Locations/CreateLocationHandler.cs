@@ -4,6 +4,7 @@ using DirectoryService.Domain.Location;
 using DirectoryService.Domain.Location.VO;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
+using Shared;
 
 namespace DirectoryService.Application.Locations;
 
@@ -25,13 +26,13 @@ public class CreateLocationHandler
         _validator = validator;
     }
 
-    public async Task<Result<Guid>> Handle(CreateLocationDTO dto, CancellationToken cancellationToken)
+    public async Task<Result<Guid, Errors>> Handle(CreateLocationDTO dto, CancellationToken cancellationToken)
     {
         var validationResult = await _validator.ValidateAsync(dto,  cancellationToken);
 
         if (!validationResult.IsValid)
         {
-            return Result.Failure<Guid>(validationResult.Errors.First().ErrorMessage);
+            return GeneralErrors.ValueIsInvalid("loccation").ToErrors();
         }
 
         var locName = LocationName.Create(dto.Name).Value;

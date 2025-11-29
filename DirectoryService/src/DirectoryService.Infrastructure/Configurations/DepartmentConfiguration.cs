@@ -1,5 +1,6 @@
 ﻿using DirectoryService.Domain;
 using DirectoryService.Domain.Department;
+using DirectoryService.Domain.Department.VO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -14,6 +15,9 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
         builder.HasKey(d => d.Id).HasName("pk_departments");
 
         builder.Property(d => d.Id)
+            .HasConversion(
+                d => d.Value,
+                id => DepartmentId.Current(id))
             .HasColumnName("id");
 
         builder.ComplexProperty(d => d.DepartmentName, nb =>
@@ -34,10 +38,7 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
 
         builder.Property(d => d.ParentId)
             .IsRequired(false)
-            .HasColumnName("parent_id")
-            .HasConversion(
-                value => value!.Value,
-                value => value);
+            .HasColumnName("parent_id");
 
         builder.ComplexProperty(d => d.Path, nb =>
             {

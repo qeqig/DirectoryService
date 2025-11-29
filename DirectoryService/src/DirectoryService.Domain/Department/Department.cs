@@ -4,10 +4,11 @@ using Path = DirectoryService.Domain.Department.VO.Path;
 
 namespace DirectoryService.Domain.Department;
 
-public class Department
+public class Department : Entity<DepartmentId>
 {
     // EF core
-    private Department() { }
+    private Department(DepartmentId id)
+        : base(id) { }
 
     private List<Department> _childDepartments = [];
 
@@ -16,17 +17,17 @@ public class Department
     private List<DepartmentPosition> _departmentsPositions = [];
 
     private Department(
-        Guid id,
+        DepartmentId id,
         DepartmentName departmentName,
         Identifier identifier,
         Path path,
         short depth,
-        Guid? parentId,
+        DepartmentId? parentId,
         IEnumerable<Department> childDepartments,
         IEnumerable<DepartmentLocation> locations,
         IEnumerable<DepartmentPosition> positions)
+        : base(id)
     {
-        Id = id;
         DepartmentName = departmentName;
         Identifier = identifier;
         Depth = depth;
@@ -38,13 +39,11 @@ public class Department
         _departmentsPositions = positions.ToList();
     }
 
-    public Guid Id { get; private set; }
-
     public DepartmentName DepartmentName { get; private set; }
 
     public Identifier Identifier { get; private set; }
 
-    public Guid? ParentId { get; private set; }
+    public DepartmentId? ParentId { get; private set; }
 
     public Path Path { get; private set; }
 
@@ -63,17 +62,18 @@ public class Department
     public DateTime UpdatedAt { get; private set; }
 
     public static Result<Department> Create(
-        Guid id,
         DepartmentName departmentName,
         Identifier identifier,
-        Guid? parentId,
+        DepartmentId? parentId,
         Path path,
         short depth,
         IEnumerable<Department> childDepartments,
         IEnumerable<DepartmentLocation> locations,
         IEnumerable<DepartmentPosition> positions)
     {
-        return new Department(id, departmentName, identifier, path, depth, parentId, childDepartments , locations, positions);
+        var newDepartId = DepartmentId.Create();
+
+        return new Department(newDepartId, departmentName, identifier, path, depth, parentId, childDepartments, locations, positions);
     }
 
 
