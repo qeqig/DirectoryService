@@ -1,6 +1,6 @@
 ﻿namespace DirectoryService.Domain.Department.VO;
 
-public record DepartmentId : IComparable<DepartmentId>
+public sealed record DepartmentId : IComparable<DepartmentId>
 {
     private DepartmentId(Guid value)
     {

@@ -3,7 +3,7 @@ using Shared;
 
 namespace DirectoryService.Domain.Position.VO;
 
-public record PositionName
+public sealed record PositionName
 {
    public const int MIN_LENGTH = 3;
 

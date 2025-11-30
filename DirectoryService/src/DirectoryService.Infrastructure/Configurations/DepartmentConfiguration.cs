@@ -64,11 +64,11 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
 
         builder.HasMany(d => d.Locations)
             .WithOne()
-            .HasForeignKey(d => d.Id);
+            .HasForeignKey(d => d.DepartmentId);
 
         builder.HasMany(d => d.Positions)
             .WithOne()
-            .HasForeignKey(d => d.Id);
+            .HasForeignKey(d => d.DepartmentId);
 
         builder.Property(d => d.CreatedAt)
             .IsRequired()

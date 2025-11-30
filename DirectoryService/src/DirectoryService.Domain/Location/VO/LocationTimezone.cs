@@ -3,7 +3,7 @@ using Shared;
 
 namespace DirectoryService.Domain.Location.VO;
 
-public record LocationTimezone
+public sealed record LocationTimezone
 {
     private LocationTimezone(string value)
     {
