@@ -1,26 +1,26 @@
 ﻿using CSharpFunctionalExtensions;
 using DirectoryService.Domain.Position.VO;
+using Shared;
 
 namespace DirectoryService.Domain.Position;
 
-public class Position
+public class Position : Entity<PositionId>
 {
     // EF core
-    private Position() { }
+    private Position(PositionId id)
+        : base(id) { }
 
     private Position(
-        Guid id,
+        PositionId id,
         PositionName name,
         string? description)
+        : base(id)
     {
-        Id = id;
         Name = name;
         Description = description;
         CreatedAt = DateTime.UtcNow;
         IsActive = true;
     }
-
-    public Guid Id { get; private set; }
 
     public PositionName Name { get; private set; }
 
@@ -32,11 +32,13 @@ public class Position
 
     public DateTime UpdatedAt { get; private set; }
 
-    static Result<Position> Create(Guid id, PositionName name, string? description)
+    static Result<Position, Error> Create(PositionName name, string? description)
     {
         if (description != null && description.Length > 1000)
-            return Result.Failure<Position>($"Description is too long. Max length is {1000}");
+            return GeneralErrors.ValueIsInvalid("position");
 
-        return new Position(id, name, description);
+        var newPositionId = PositionId.Create();
+
+        return new Position(newPositionId, name, description);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Shared;
 
 namespace DirectoryService.Domain.Position.VO;
 
@@ -15,13 +16,13 @@ public record PositionName
 
    public string Value { get; }
 
-   public static Result<PositionName> Create(string value)
+   public static Result<PositionName, Error> Create(string value)
    {
        if (string.IsNullOrWhiteSpace(value))
-           return Result.Failure<PositionName>("PositionName cannot be empty");
+           return GeneralErrors.ValueIsRequired("position name");
 
        if (value.Length < MIN_LENGTH || value.Length > MAX_LENGTH)
-           return Result.Failure<PositionName>("The position name is too short or too long");
+           return GeneralErrors.ValueIsInvalid("position name");
 
        return new PositionName(value);
    }

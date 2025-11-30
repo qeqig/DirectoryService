@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using Shared;
 
 namespace DirectoryService.Domain.Location.VO;
 
@@ -15,13 +16,13 @@ public record LocationName
 
     public string Value { get; }
 
-    public static Result<LocationName> Create(string value)
+    public static Result<LocationName, Error> Create(string value)
     {
         if (string.IsNullOrWhiteSpace(value))
-            return Result.Failure<LocationName>("LocationName cannot be empty.");
+            return GeneralErrors.ValueIsRequired("location name");
 
         if (value.Length > MAX_LENGTH || value.Length < MIN_LENGTH)
-            return Result.Failure<LocationName>($"Location name must be between {MIN_LENGTH} and {MAX_LENGTH} characters long.");
+            return GeneralErrors.ValueIsInvalid("location name");
 
         return new LocationName(value);
     }
