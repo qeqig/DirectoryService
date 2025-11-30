@@ -1,10 +1,8 @@
-﻿using CSharpFunctionalExtensions;
-using Shared;
+﻿namespace DirectoryService.Domain.Department.VO;
 
-namespace DirectoryService.Domain.Department.VO;
-
-public record Path
+public sealed record Path
 {
+    private const char Separator = '/';
     private Path(string value)
     {
         Value = value;
@@ -12,11 +10,13 @@ public record Path
 
     public string Value { get; }
 
-    public static Result<Path, Error> Create(string value)
+    public static Path CreateParent(Identifier identifier)
     {
-        if (string.IsNullOrWhiteSpace(value))
-            return GeneralErrors.ValueIsRequired("department name");
+        return new Path(identifier.Value);
+    }
 
-        return new Path(value);
+    public Path CreateChild(Identifier childIdentifier)
+    {
+        return new Path(Value + Separator + childIdentifier.Value);
     }
 }

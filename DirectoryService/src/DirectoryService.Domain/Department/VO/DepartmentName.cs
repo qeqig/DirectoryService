@@ -3,7 +3,7 @@ using Shared;
 
 namespace DirectoryService.Domain.Department.VO;
 
-public record DepartmentName
+public sealed record DepartmentName
 {
     public const int MAX_LENGTH = 150;
     public const int MIN_LENGTH = 3;
@@ -19,7 +19,7 @@ public record DepartmentName
         if (string.IsNullOrWhiteSpace(value))
             return GeneralErrors.ValueIsRequired("department name");
 
-        if (value.Length > MAX_LENGTH || value.Length < MIN_LENGTH)
+        if (value.Length is > MAX_LENGTH or < MIN_LENGTH)
             return GeneralErrors.ValueIsInvalid("department name");
 
         return new DepartmentName(value);

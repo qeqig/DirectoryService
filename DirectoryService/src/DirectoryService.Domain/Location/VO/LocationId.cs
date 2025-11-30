@@ -1,6 +1,6 @@
 ﻿namespace DirectoryService.Domain.Location.VO;
 
-public record LocationId : IComparable<LocationId>
+public sealed record LocationId : IComparable<LocationId>
 {
     private LocationId(Guid value)
     {

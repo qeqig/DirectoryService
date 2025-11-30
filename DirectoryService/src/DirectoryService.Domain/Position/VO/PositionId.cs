@@ -1,6 +1,6 @@
 ﻿namespace DirectoryService.Domain.Position.VO;
 
-public record PositionId : IComparable<PositionId>
+public sealed record PositionId : IComparable<PositionId>
 {
 
     private PositionId(Guid value)
