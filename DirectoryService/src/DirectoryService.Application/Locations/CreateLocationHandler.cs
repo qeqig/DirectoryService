@@ -32,7 +32,7 @@ public class CreateLocationHandler
 
         if (!validationResult.IsValid)
         {
-            return GeneralErrors.ValueIsInvalid("loccation").ToErrors();
+            return GeneralErrors.ValueIsInvalid("location").ToErrors();
         }
 
         var locName = LocationName.Create(dto.Name).Value;
