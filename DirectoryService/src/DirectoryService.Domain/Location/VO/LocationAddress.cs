@@ -3,7 +3,7 @@ using Shared;
 
 namespace DirectoryService.Domain.Location.VO;
 
-public record LocationAddress
+public sealed record LocationAddress
 {
     private LocationAddress(string country, string city, string street, string houseNumber)
     {

@@ -4,7 +4,7 @@ using Shared;
 
 namespace DirectoryService.Domain.Position;
 
-public class Position : Entity<PositionId>
+public sealed class Position : Entity<PositionId>
 {
     // EF core
     private Position(PositionId id)

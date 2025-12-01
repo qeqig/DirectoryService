@@ -4,7 +4,7 @@ using Shared;
 
 namespace DirectoryService.Domain.Department.VO;
 
-public record Identifier
+public sealed record Identifier
 {
     public const int MAX_LENGTH = 150;
 
@@ -24,7 +24,7 @@ public record Identifier
         if (string.IsNullOrWhiteSpace(value))
             return GeneralErrors.ValueIsRequired("department identifier");
 
-        if (value.Length > MAX_LENGTH || value.Length < MIN_LENGTH)
+        if (value.Length is > MAX_LENGTH or < MIN_LENGTH)
             return GeneralErrors.ValueIsInvalid("department identifier");
 
         if (!_latin.IsMatch(value))

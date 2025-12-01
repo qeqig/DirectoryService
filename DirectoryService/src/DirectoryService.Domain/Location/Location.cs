@@ -1,9 +1,10 @@
 ﻿using CSharpFunctionalExtensions;
+using DirectoryService.Domain.DepartmentLocations;
 using DirectoryService.Domain.Location.VO;
 
 namespace DirectoryService.Domain.Location;
 
-public class Location : Entity<LocationId>
+public sealed class Location : Entity<LocationId>
 {
     // EF core
     private Location(LocationId id)
@@ -16,7 +17,7 @@ public class Location : Entity<LocationId>
         LocationName locationName,
         LocationAddress address,
         LocationTimezone locationTimezone
-        /*IEnumerable<DepartmentLocation> departments*/)
+        /*IEnumerable<DepartmentLocations> departments*/)
         : base(id)
     {
         LocationName = locationName;
@@ -43,7 +44,7 @@ public class Location : Entity<LocationId>
         LocationName locationName,
         LocationTimezone locationTimezone,
         LocationAddress address
-        /*,IEnumerable<DepartmentLocation> departments*/)
+        /*,IEnumerable<DepartmentLocations> departments*/)
     {
         var newLocationId = LocationId.Create();
         return new Location(newLocationId, locationName, address, locationTimezone/*, departments*/);

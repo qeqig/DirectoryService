@@ -1,6 +1,6 @@
-﻿using DirectoryService.Domain;
-using DirectoryService.Domain.Department;
+﻿using DirectoryService.Domain.Department;
 using DirectoryService.Domain.Department.VO;
+using DirectoryService.Domain.DepartmentPositions;
 using DirectoryService.Domain.Position;
 using DirectoryService.Domain.Position.VO;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +16,12 @@ public class DepartmentPositionConfiguration : IEntityTypeConfiguration<Departme
 
         builder.HasKey(d => d.Id).HasName("pk_department_positions");
 
-        builder.Property(d => d.Id).HasColumnName("id");
+        builder.Property(d => d.Id)
+            .HasColumnName("id")
+            .IsRequired()
+            .HasConversion(
+                id => id.Value,
+                value => new DepartmentPositionId(value));
 
         builder.Property(d => d.DepartmentId)
             .IsRequired()
