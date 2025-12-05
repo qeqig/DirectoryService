@@ -1,4 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
+using DirectoryService.Application.Abstractions;
+using DirectoryService.Application.IRepositories;
 using DirectoryService.Contracts.Location;
 using DirectoryService.Domain.Location;
 using DirectoryService.Domain.Location.VO;
@@ -6,9 +8,9 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Shared;
 
-namespace DirectoryService.Application.Locations;
+namespace DirectoryService.Application.CreateLocation;
 
-public class CreateLocationHandler
+public class CreateLocationHandler : ICommandHandler<Guid, CreateLocationCommand>
 {
     private readonly ILocationsRepository _locationsRepository;
 
@@ -26,28 +28,31 @@ public class CreateLocationHandler
         _validator = validator;
     }
 
-    public async Task<Result<Guid, Errors>> Handle(CreateLocationDTO dto, CancellationToken cancellationToken)
+    public async Task<Result<Guid, Errors>> Handle(CreateLocationCommand command, CancellationToken cancellationToken)
     {
-        var validationResult = await _validator.ValidateAsync(dto,  cancellationToken);
+        var validationResult = await _validator.ValidateAsync(command.CreateLocationDto, cancellationToken);
 
         if (!validationResult.IsValid)
         {
             return GeneralErrors.ValueIsInvalid("location").ToErrors();
         }
 
-        var locName = LocationName.Create(dto.Name).Value;
+        var locName = LocationName.Create(command.CreateLocationDto.Name).Value;
 
         var address = LocationAddress.Create(
-            dto.Address.Country,
-            dto.Address.City,
-            dto.Address.Street,
-            dto.Address.HouseNumber).Value;
+            command.CreateLocationDto.Address.Country,
+            command.CreateLocationDto.Address.City,
+            command.CreateLocationDto.Address.Street,
+            command.CreateLocationDto.Address.HouseNumber).Value;
 
-        var timeZone = LocationTimezone.Create(dto.TimeZone).Value;
+        var timeZone = LocationTimezone.Create(command.CreateLocationDto.TimeZone).Value;
 
         var location = Location.Create(locName, timeZone, address);
 
-        await _locationsRepository.AddAsync(location.Value, cancellationToken);
+        var repositoryResult = await _locationsRepository.AddAsync(location.Value, cancellationToken);
+
+        if (repositoryResult.IsFailure)
+            return Error.Failure(null, repositoryResult.Error.Message).ToErrors();
 
         _logger.LogInformation("Created location with id {location.Value.Id}", location.Value.Id);
 

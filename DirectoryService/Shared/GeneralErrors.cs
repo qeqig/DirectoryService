@@ -20,13 +20,19 @@ public static class GeneralErrors
         return Error.Validation("length.is.invalid", $"Поле {label} обязательно", name);
     }
 
-    public static Error AlreadyExist()
+    public static Error AlreadyExist(string? name = null)
     {
+        string label = name ?? string.Empty;
         return Error.Conflict("record.already.exist", "Запись уже существует");
     }
 
     public static Error Failure()
     {
         return Error.Failure("server.failure", "Серверная ошибка");
+    }
+
+    public static Error DataBase(string? code = null)
+    {
+        return Error.Conflict(code, "Ошибка в БД");
     }
 }

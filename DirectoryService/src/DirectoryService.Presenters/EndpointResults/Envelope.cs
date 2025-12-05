@@ -12,7 +12,7 @@ public record Envelope
 
     public DateTime TimeGenerated { get; }
 
-    public Envelope(object? result, Errors? errorsList)
+    private Envelope(object? result, Errors? errorsList)
     {
         Result = result;
         ErrorsList = errorsList;
@@ -34,7 +34,7 @@ public record Envelope<T>
 
     public DateTime TimeGenerated { get; }
 
-    public Envelope(T? result, Errors? errorsList)
+    private Envelope(T? result, Errors? errorsList)
     {
         Result = result;
         ErrorsList = errorsList;
