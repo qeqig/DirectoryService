@@ -1,5 +1,7 @@
 ﻿using DirectoryService.Application.IRepositories;
-using DirectoryService.Infrastructure.Repositories;
+using DirectoryService.Infrastructure.Departments;
+using DirectoryService.Infrastructure.Locations;
+using DirectoryService.Infrastructure.Positions;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -12,6 +14,10 @@ public static class DependencyInjecttion
         services.AddScoped(s => new DirectoryServiceDbContext(configuration));
 
         services.AddScoped<ILocationsRepository, LocationRepository>();
+
+        services.AddScoped<IDepartmentsRepository, DepartmentRepository>();
+
+        services.AddScoped<IPositionsRepository,  PositionRepository>();
 
         return services;
     }

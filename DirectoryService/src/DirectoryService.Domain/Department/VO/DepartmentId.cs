@@ -13,6 +13,8 @@ public sealed record DepartmentId : IComparable<DepartmentId>
 
     public static DepartmentId Current(Guid id) => new(id);
 
+    public static DepartmentId[] Current(Guid[] id) => id.Select(Current).ToArray();
+
     public int CompareTo(DepartmentId? other)
     {
         if (other is null) return 1;

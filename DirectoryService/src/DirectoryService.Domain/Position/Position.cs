@@ -1,4 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
+using DirectoryService.Domain.DepartmentPositions;
 using DirectoryService.Domain.Position.VO;
 using Shared;
 
@@ -6,6 +7,8 @@ namespace DirectoryService.Domain.Position;
 
 public sealed class Position : Entity<PositionId>
 {
+    private readonly List<DepartmentPosition> _departments;
+
     // EF core
     private Position(PositionId id)
         : base(id) { }
@@ -13,32 +16,33 @@ public sealed class Position : Entity<PositionId>
     private Position(
         PositionId id,
         PositionName name,
-        string? description)
+        Description? description,
+        IEnumerable<DepartmentPosition> departments)
         : base(id)
     {
         Name = name;
         Description = description;
         CreatedAt = DateTime.UtcNow;
         IsActive = true;
+        _departments = departments.ToList();
     }
 
-    public PositionName Name { get; private set; }
+    public PositionName Name { get; private set; } = null!;
 
-    public string? Description { get; private set; }
+    public Description? Description { get; private set; }
 
-    public bool IsActive { get; private set; }
+    public bool IsActive { get; private set; } = true;
 
-    public DateTime CreatedAt { get; private set; }
+    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
-    public DateTime UpdatedAt { get; private set; }
+    public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
 
-    static Result<Position, Error> Create(PositionName name, string? description)
+    public IReadOnlyList<DepartmentPosition> Departments => _departments.AsReadOnly();
+
+    public static Result<Position, Error> Create(PositionName name, Description? description,  IEnumerable<DepartmentPosition> departments)
     {
-        if (description != null && description.Length > 1000)
-            return GeneralErrors.ValueIsInvalid("position");
-
         var newPositionId = PositionId.Create();
 
-        return new Position(newPositionId, name, description);
+        return new Position(newPositionId, name, description, departments);
     }
 }

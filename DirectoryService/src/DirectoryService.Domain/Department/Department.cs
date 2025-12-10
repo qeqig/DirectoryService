@@ -25,8 +25,8 @@ public class Department : Entity<DepartmentId>
         Identifier identifier,
         Path path,
         int depth,
-        IEnumerable<DepartmentLocation> locations
-        )
+        IEnumerable<DepartmentLocation> locations,
+        DepartmentId? parentId = null)
         : base(id)
     {
         DepartmentName = departmentName;
@@ -35,6 +35,7 @@ public class Department : Entity<DepartmentId>
         Path = path;
         CreatedAt = DateTime.UtcNow;
         _departmentsLocations = locations.ToList();
+        ParentId = parentId;
 
     }
 
@@ -48,7 +49,7 @@ public class Department : Entity<DepartmentId>
 
     public int Depth { get; private set; }
 
-    public bool IsActive { get; private set; }
+    public bool IsActive { get; private set; } = true;
 
     public IReadOnlyList<Department> ChildDepartments => _childDepartments;
 
@@ -56,9 +57,9 @@ public class Department : Entity<DepartmentId>
 
     public IReadOnlyList<DepartmentPosition> Positions => _departmentsPositions;
 
-    public DateTime CreatedAt { get; private set; }
+    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
-    public DateTime UpdatedAt { get; private set; }
+    public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
 
     public static Result<Department, Error> CreateParent(
         DepartmentName name,
@@ -89,7 +90,9 @@ public class Department : Entity<DepartmentId>
 
         var path = parent.Path.CreateChild(identifier);
 
-        return new Department(departmentId ?? DepartmentId.Create(), name, identifier, path, 0, departmentLocationList);
+        var parentId = parent.Id;
+
+        return new Department(departmentId ?? DepartmentId.Create(), name, identifier, path, parent.Depth + 1, departmentLocationList, parentId);
     }
 }
 

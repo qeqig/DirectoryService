@@ -26,19 +26,19 @@ public sealed class Location : Entity<LocationId>
         //_departments = departments.ToList();
     }
 
-    public LocationName LocationName { get; private set; }
+    public LocationName LocationName { get; private set; } = null!;
 
-    public LocationAddress Address { get; private set; }
+    public LocationAddress Address { get; private set; } = null!;
 
     public IReadOnlyList<DepartmentLocation> Departments => _departments;
 
-    public LocationTimezone LocationTimezone { get; private set; }
+    public LocationTimezone LocationTimezone { get; private set; } = null!;
 
-    public bool IsActive { get; private set; }
+    public bool IsActive { get; private set; } = true;
 
-    public DateTime CreatedAt { get; private set; }
+    public DateTime CreatedAt { get; private set; } = DateTime.UtcNow;
 
-    public DateTime UpdatedAt { get; private set; }
+    public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
 
     public static Result<Location> Create(
         LocationName locationName,

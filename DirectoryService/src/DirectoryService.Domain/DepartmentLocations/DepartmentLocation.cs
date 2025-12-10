@@ -20,4 +20,9 @@ public sealed class DepartmentLocation
     public DepartmentId DepartmentId { get; private set; }
 
     public LocationId LocationId { get; private set; }
+
+    public static DepartmentLocation Create(DepartmentLocationId id, DepartmentId departmentId, LocationId locationId)
+    {
+        return new DepartmentLocation(id,  departmentId, locationId);
+    }
 }

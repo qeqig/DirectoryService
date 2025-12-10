@@ -14,14 +14,14 @@ public class CreateLocationHandler : ICommandHandler<Guid, CreateLocationCommand
 {
     private readonly ILocationsRepository _locationsRepository;
 
-    private readonly IValidator<CreateLocationDTO> _validator;
+    private readonly IValidator<CreateLocationDto> _validator;
 
     private readonly ILogger<CreateLocationHandler> _logger;
 
     public CreateLocationHandler(
         ILocationsRepository locationsRepository,
         ILogger<CreateLocationHandler> logger,
-        IValidator<CreateLocationDTO> validator)
+        IValidator<CreateLocationDto> validator)
     {
         _locationsRepository = locationsRepository;
         _logger = logger;
