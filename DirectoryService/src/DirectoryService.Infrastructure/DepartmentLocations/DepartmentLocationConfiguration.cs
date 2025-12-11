@@ -6,7 +6,7 @@ using DirectoryService.Domain.Location.VO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DirectoryService.Infrastructure.Configurations;
+namespace DirectoryService.Infrastructure.DepartmentLocations;
 
 public class DepartmentLocationConfiguration : IEntityTypeConfiguration<DepartmentLocation>
 {
@@ -21,7 +21,7 @@ public class DepartmentLocationConfiguration : IEntityTypeConfiguration<Departme
             .IsRequired()
             .HasConversion(
                 id => id.Value,
-                value => new DepartmentLocationId(value));
+                value => DepartmentLocationId.Current(value));
 
         builder.Property(d => d.DepartmentId)
             .IsRequired()

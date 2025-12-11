@@ -4,7 +4,7 @@ using DirectoryService.Domain.Location.VO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DirectoryService.Infrastructure.Configurations;
+namespace DirectoryService.Infrastructure.Locations;
 
 public class LocationConfiguration : IEntityTypeConfiguration<Location>
 {

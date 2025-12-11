@@ -13,6 +13,8 @@ public sealed record LocationId : IComparable<LocationId>
 
     public static LocationId Current(Guid id) => new(id);
 
+    public static LocationId[] Current(Guid[] id) => id.Select(Current).ToArray();
+
     public int CompareTo(LocationId? other)
     {
         if (other is null) return 1;

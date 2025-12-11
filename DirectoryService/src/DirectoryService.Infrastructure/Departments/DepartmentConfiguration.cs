@@ -4,7 +4,7 @@ using DirectoryService.Domain.Department.VO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DirectoryService.Infrastructure.Configurations;
+namespace DirectoryService.Infrastructure.Departments;
 
 public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
 {

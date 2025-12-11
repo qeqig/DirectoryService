@@ -2,7 +2,7 @@
 
 public sealed record Path
 {
-    private const char Separator = '/';
+    private const char Separator = '.';
     private Path(string value)
     {
         Value = value;

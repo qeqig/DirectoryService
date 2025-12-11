@@ -6,7 +6,7 @@ using DirectoryService.Domain.Position.VO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DirectoryService.Infrastructure.Configurations;
+namespace DirectoryService.Infrastructure.DepartmentPositions;
 
 public class DepartmentPositionConfiguration : IEntityTypeConfiguration<DepartmentPosition>
 {
@@ -21,7 +21,7 @@ public class DepartmentPositionConfiguration : IEntityTypeConfiguration<Departme
             .IsRequired()
             .HasConversion(
                 id => id.Value,
-                value => new DepartmentPositionId(value));
+                value => DepartmentPositionId.Current(value));
 
         builder.Property(d => d.DepartmentId)
             .IsRequired()
@@ -47,7 +47,7 @@ public class DepartmentPositionConfiguration : IEntityTypeConfiguration<Departme
 
         builder
             .HasOne<Position>()
-            .WithMany()
+            .WithMany(d => d.Departments)
             .HasForeignKey(d => d.PositionId)
             .OnDelete(DeleteBehavior.Cascade)
             .HasConstraintName("fk_department_position_position_id");

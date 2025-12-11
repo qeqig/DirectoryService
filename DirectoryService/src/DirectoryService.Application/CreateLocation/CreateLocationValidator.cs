@@ -5,7 +5,7 @@ using FluentValidation;
 
 namespace DirectoryService.Application.CreateLocation;
 
-public class CreateLocationValidator : AbstractValidator<CreateLocationDTO>
+public class CreateLocationValidator : AbstractValidator<CreateLocationDto>
 {
     public CreateLocationValidator()
     {

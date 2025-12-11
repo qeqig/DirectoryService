@@ -4,7 +4,7 @@ using DirectoryService.Domain.Position.VO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace DirectoryService.Infrastructure.Configurations;
+namespace DirectoryService.Infrastructure.Positions;
 
 public class PositionConfiguration : IEntityTypeConfiguration<Position>
 {
@@ -28,10 +28,13 @@ public class PositionConfiguration : IEntityTypeConfiguration<Position>
                 .HasColumnName("name");
         });
 
-        builder.Property(p => p.Description)
-            .IsRequired(false)
-            .HasMaxLength(LengthConstant.LENGTH_500)
-            .HasColumnName("description");
+        builder.OwnsOne(p => p.Description, nb =>
+        {
+            nb.Property(p => p.Value)
+                .IsRequired(false)
+                .HasMaxLength(LengthConstant.LENGTH_500)
+                .HasColumnName("description");
+        });
 
         builder.Property(p => p.IsActive)
             .IsRequired()

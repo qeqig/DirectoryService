@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using DirectoryService.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -12,9 +13,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DirectoryService.Infrastructure.Migrations
 {
     [DbContext(typeof(DirectoryServiceDbContext))]
-    partial class DirectoryServiceDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251210133157_update3")]
+    partial class update3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -128,12 +131,17 @@ namespace DirectoryService.Infrastructure.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("position_id");
 
+                    b.Property<Guid?>("PositionId1")
+                        .HasColumnType("uuid");
+
                     b.HasKey("Id")
                         .HasName("pk_department_positions");
 
                     b.HasIndex("DepartmentId");
 
                     b.HasIndex("PositionId");
+
+                    b.HasIndex("PositionId1");
 
                     b.ToTable("department_positions", (string)null);
                 });
@@ -254,11 +262,15 @@ namespace DirectoryService.Infrastructure.Migrations
                         .HasConstraintName("fk_department_position_department_id");
 
                     b.HasOne("DirectoryService.Domain.Position.Position", null)
-                        .WithMany("Departments")
+                        .WithMany()
                         .HasForeignKey("PositionId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("fk_department_position_position_id");
+
+                    b.HasOne("DirectoryService.Domain.Position.Position", null)
+                        .WithMany("Departments")
+                        .HasForeignKey("PositionId1");
                 });
 
             modelBuilder.Entity("DirectoryService.Domain.Location.Location", b =>
