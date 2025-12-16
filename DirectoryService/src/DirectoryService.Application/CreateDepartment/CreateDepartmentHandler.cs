@@ -2,6 +2,7 @@
 using DirectoryService.Application.Abstractions;
 using DirectoryService.Application.IRepositories;
 using DirectoryService.Contracts.Department;
+using DirectoryService.Contracts.Department.CreateDepartment;
 using DirectoryService.Domain.Department;
 using DirectoryService.Domain.Department.VO;
 using DirectoryService.Domain.DepartmentLocations;
@@ -71,7 +72,8 @@ public class CreateDepartmentHandler : ICommandHandler<Guid, CreateDepartmentCom
         }
         else
         {
-            var getParentResult = await _departmentsRepository.GetById(parentId.Value, cancellationToken);
+            var parentDepartmentId = DepartmentId.Current(parentId.Value);
+            var getParentResult = await _departmentsRepository.GetById(parentDepartmentId, cancellationToken);
 
             if (getParentResult.IsFailure)
                 return getParentResult.Error.ToErrors();

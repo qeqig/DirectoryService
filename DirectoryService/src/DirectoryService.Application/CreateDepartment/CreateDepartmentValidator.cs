@@ -1,5 +1,6 @@
 ﻿using DirectoryService.Application.Validation;
 using DirectoryService.Contracts.Department;
+using DirectoryService.Contracts.Department.CreateDepartment;
 using DirectoryService.Domain.Department.VO;
 using FluentValidation;
 using Shared;

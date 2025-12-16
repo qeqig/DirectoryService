@@ -83,7 +83,7 @@ public class LocationRepository : ILocationsRepository
     public async Task<Result<IReadOnlyCollection<Location>, Errors>> GetByIds(List<LocationId> locationIds, CancellationToken cancellationToken = default)
     {
         var locations = await _dbContext.Locations.Where(l => locationIds.Contains(l.Id)).ToListAsync(cancellationToken);
-        
+
         var notFoundIds = locationIds.Except(locations.Select(l => l.Id));
 
         if (notFoundIds.Any())

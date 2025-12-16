@@ -1,4 +1,6 @@
-﻿using DirectoryService.Application.IRepositories;
+﻿using DirectoryService.Application.Database;
+using DirectoryService.Application.IRepositories;
+using DirectoryService.Infrastructure.Database;
 using DirectoryService.Infrastructure.Departments;
 using DirectoryService.Infrastructure.Locations;
 using DirectoryService.Infrastructure.Positions;
@@ -7,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace DirectoryService.Infrastructure;
 
-public static class DependencyInjecttion
+public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
@@ -18,6 +20,8 @@ public static class DependencyInjecttion
         services.AddScoped<IDepartmentsRepository, DepartmentRepository>();
 
         services.AddScoped<IPositionsRepository,  PositionRepository>();
+
+        services.AddScoped<ITransactionManager, TransactionManager>();
 
         return services;
     }
