@@ -94,5 +94,19 @@ public class Department : Entity<DepartmentId>
 
         return new Department(departmentId ?? DepartmentId.Create(), name, identifier, path, parent.Depth + 1, departmentLocationList, parentId);
     }
+
+    public UnitResult<Error> UpdateLocationId(IEnumerable<DepartmentLocation> locations)
+    {
+        var locationList = locations.ToList();
+
+        if (locationList.Count == 0)
+            return GeneralErrors.ValueIsRequired("locationId");
+
+        _departmentsLocations.Clear();
+
+        _departmentsLocations.AddRange(locationList);
+
+        return UnitResult.Success<Error>();
+    }
 }
 
