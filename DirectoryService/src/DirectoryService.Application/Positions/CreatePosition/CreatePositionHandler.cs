@@ -10,7 +10,7 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Shared;
 
-namespace DirectoryService.Application.CreatePosition;
+namespace DirectoryService.Application.Positions.CreatePosition;
 
 public class CreatePositionHandler : ICommandHandler<Guid, CreatePositionCommand>
 {

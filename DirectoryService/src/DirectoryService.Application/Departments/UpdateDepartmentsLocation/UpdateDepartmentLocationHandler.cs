@@ -10,7 +10,7 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Shared;
 
-namespace DirectoryService.Application.UpdateDepartmentsLocation;
+namespace DirectoryService.Application.Departments.UpdateDepartmentsLocation;
 
 public class UpdateDepartmentLocationHandler : ICommandHandler<Guid, UpdateDepartmentLocationCommand>
 {
@@ -41,7 +41,7 @@ public class UpdateDepartmentLocationHandler : ICommandHandler<Guid, UpdateDepar
          if (!validationResult.IsValid)
              return GeneralErrors.ValueIsInvalid("UpdateDepartmentLocation").ToErrors();
 
-         var transactionResult = await _transactionManager.BeginTransactionAsync(cancellationToken);
+         var transactionResult = await _transactionManager.BeginTransactionAsync(cancellationToken: cancellationToken);
 
          if (transactionResult.IsFailure)
              return transactionResult.Error.ToErrors();
@@ -50,15 +50,13 @@ public class UpdateDepartmentLocationHandler : ICommandHandler<Guid, UpdateDepar
 
          var departmentId = DepartmentId.Current(command.DepartmentId);
 
-         var getDepartmentResult = await _departmentsRepository.GetById(departmentId, cancellationToken);
+         var department = await _departmentsRepository.GetBy(d => d.Id == departmentId && d.IsActive, cancellationToken);
 
-         if (getDepartmentResult.IsFailure)
+         if (department == null)
          {
              transaction.Rollback();
-             return getDepartmentResult.Error.ToErrors();
+             return GeneralErrors.NotFound(departmentId.Value, "department").ToErrors();
          }
-
-         var department = getDepartmentResult.Value;
 
          var checkExistingResult = await _locationsRepository.CheckExisting(command.Dto.LocationIds, cancellationToken);
 

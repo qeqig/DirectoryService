@@ -3,7 +3,7 @@ using DirectoryService.Contracts.Department.UpdateDepartments;
 using FluentValidation;
 using Shared;
 
-namespace DirectoryService.Application.UpdateDepartmentsLocation;
+namespace DirectoryService.Application.Departments.UpdateDepartmentsLocation;
 
 public class UpdateDepartmentLocationValidator : AbstractValidator<UpdateDepartmentLocationDto>
 {
