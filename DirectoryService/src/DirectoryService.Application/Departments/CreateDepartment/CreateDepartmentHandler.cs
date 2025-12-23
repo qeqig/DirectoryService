@@ -1,7 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using DirectoryService.Application.Abstractions;
 using DirectoryService.Application.IRepositories;
-using DirectoryService.Contracts.Department;
 using DirectoryService.Contracts.Department.CreateDepartment;
 using DirectoryService.Domain.Department;
 using DirectoryService.Domain.Department.VO;
@@ -11,7 +10,7 @@ using FluentValidation;
 using Microsoft.Extensions.Logging;
 using Shared;
 
-namespace DirectoryService.Application.CreateDepartment;
+namespace DirectoryService.Application.Departments.CreateDepartment;
 
 public class CreateDepartmentHandler : ICommandHandler<Guid, CreateDepartmentCommand>
 {
@@ -73,12 +72,13 @@ public class CreateDepartmentHandler : ICommandHandler<Guid, CreateDepartmentCom
         else
         {
             var parentDepartmentId = DepartmentId.Current(parentId.Value);
-            var getParentResult = await _departmentsRepository.GetById(parentDepartmentId, cancellationToken);
+            var parentDepartment = await _departmentsRepository.
+                GetBy(d => d.Id == parentDepartmentId, cancellationToken);
 
-            if (getParentResult.IsFailure)
-                return getParentResult.Error.ToErrors();
+            if (parentDepartment == null)
+                return GeneralErrors.NotFound(departmentId.Value, "department").ToErrors();
 
-            var childDepartmentResult = Department.CreateChild(name, identifier, getParentResult.Value, locationIds, departmentId);
+            var childDepartmentResult = Department.CreateChild(name, identifier, parentDepartment, locationIds, departmentId);
 
             if (childDepartmentResult.IsFailure)
                 return childDepartmentResult.Error.ToErrors();

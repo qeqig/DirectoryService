@@ -18,4 +18,9 @@
       <PackageReference Include="Scrutor" Version="7.0.0" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Locations\" />
+      <Folder Include="Positions\" />
+    </ItemGroup>
+
 </Project>

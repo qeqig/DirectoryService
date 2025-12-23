@@ -108,5 +108,23 @@ public class Department : Entity<DepartmentId>
 
         return UnitResult.Success<Error>();
     }
+
+    public void MoveDepartment(Department? department)
+    {
+        if (department == null)
+        {
+            Depth = 0;
+            Path = Path.CreateParent(Identifier);
+        }
+        else
+        {
+            Depth = department.Depth + 1;
+            Path = Path.CreateChild(Identifier);
+        }
+
+        ParentId = department?.Id;
+
+        UpdatedAt = DateTime.UtcNow;
+    }
 }
 

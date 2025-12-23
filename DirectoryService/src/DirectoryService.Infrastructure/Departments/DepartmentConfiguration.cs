@@ -20,7 +20,7 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
                 id => DepartmentId.Current(id))
             .HasColumnName("id");
 
-        builder.ComplexProperty(d => d.DepartmentName, nb =>
+        builder.OwnsOne(d => d.DepartmentName, nb =>
         {
             nb.Property(v => v.Value)
                 .IsRequired()
@@ -28,7 +28,7 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
                 .HasColumnName("name");
         });
 
-        builder.ComplexProperty(d => d.Identifier, nb =>
+        builder.OwnsOne(d => d.Identifier, nb =>
         {
             nb.Property(v => v.Value)
                 .IsRequired()
@@ -40,13 +40,18 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
             .IsRequired(false)
             .HasColumnName("parent_id");
 
-        builder.ComplexProperty(d => d.Path, nb =>
-            {
-                nb.Property(v => v.Value)
-                    .IsRequired()
-                    .HasMaxLength(LengthConstant.LENGTH_500)
-                    .HasColumnName("path");
-            });
+        builder.OwnsOne(d => d.Path, nb =>
+        {
+            nb.Property(p => p.Value)
+                .IsRequired()
+                .HasColumnType("ltree")
+                .HasMaxLength(LengthConstant.LENGTH_500)
+                .HasColumnName("path");
+
+            nb.HasIndex(p => p.Value)
+                .HasMethod("gist")
+                .HasDatabaseName("ix_department_path");
+        });
 
         builder.Property(d => d.Depth)
             .IsRequired()

@@ -1,10 +1,12 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Linq.Expressions;
+using CSharpFunctionalExtensions;
 using DirectoryService.Application.IRepositories;
 using DirectoryService.Domain.Department;
 using DirectoryService.Domain.Department.VO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Shared;
+using Path = DirectoryService.Domain.Department.VO.Path;
 
 namespace DirectoryService.Infrastructure.Departments;
 
@@ -45,18 +47,6 @@ public class DepartmentRepository : IDepartmentsRepository
 
     }
 
-    public async Task<Result<Department, Error>> GetById(DepartmentId departmentId, CancellationToken cancellationToken = default)
-    {
-        var department = await _dbContext.Departments
-            .Where(d => d.IsActive == true)
-            .FirstOrDefaultAsync(d => departmentId == d.Id, cancellationToken);
-
-        if (department == null)
-            return GeneralErrors.NotFound(departmentId.Value, "department");
-
-        return department;
-    }
-
     public async Task<UnitResult<Errors>> ChekExisting(Guid[] ids, CancellationToken cancellationToken = default)
     {
         var departmentsIds = DepartmentId.Current(ids);
@@ -82,5 +72,90 @@ public class DepartmentRepository : IDepartmentsRepository
             .ExecuteDeleteAsync(cancellationToken);
 
         return UnitResult.Success<Error>();
+    }
+
+    public async Task<bool> CheckExistChildForParent(DepartmentId departmentId, DepartmentId parentId, CancellationToken cancellationToken = default) =>
+        await _dbContext.Departments.AnyAsync(
+            d => d.Id == departmentId
+                 && d.ChildDepartments.Any(c => c.Id == parentId), cancellationToken);
+
+    public async Task<Department?> GetBy(Expression<Func<Department, bool>> predicate, CancellationToken cancellationToken = default) =>
+        await _dbContext.Departments.FirstOrDefaultAsync(predicate, cancellationToken);
+
+    public async Task<Result<Department, Error>> GetByIdWithLock(DepartmentId departmentId, CancellationToken cancellationToken = default)
+    {
+        var id = departmentId.Value;
+
+        var department = await _dbContext.Departments.FromSql(
+            $"""
+             SELECT 
+                id,
+                parent_id,
+                depth,
+                is_active,
+                created_at,
+                updated_at,
+                name,
+                identifier,
+                path
+             FROM departments WHERE id = {id} AND is_active FOR UPDATE
+             """)
+            .FirstOrDefaultAsync(cancellationToken);
+
+        if (department == null)
+            return GeneralErrors.NotFound(departmentId.Value, "department");
+
+        return department;
+    }
+
+    public async Task<IReadOnlyList<Department>> GetChildWithLock(Path path, CancellationToken cancellationToken = default)
+    {
+        var parentPath = path.Value;
+
+        var child = await _dbContext.Departments.FromSql(
+            $"""
+             SELECT 
+                id,
+                parent_id,
+                depth,
+                is_active,
+                created_at,
+                updated_at,
+                name,
+                identifier,
+                path
+              FROM departments WHERE path <@ {parentPath}::ltree FOR UPDATE
+             """).ToListAsync(cancellationToken);
+
+        return child;
+    }
+
+    public async Task<UnitResult<Error>> UpdateChildren(Path path, Department department,
+        CancellationToken cancellationToken = default)
+    {
+        var oldPath = path.Value;
+
+        var newPath = department.Path.Value;
+
+        var newDepth = department.Depth;
+
+        try
+        {
+            await _dbContext.Database.ExecuteSqlAsync(
+                $"""
+                 UPDATE departments 
+                 SET depth = {newDepth} + nlevel(subpath(path, nlevel({oldPath}::ltree), nlevel(path::ltree))),
+                 path = ({newPath}::ltree || subpath(path, nlevel({oldPath}::ltree), nlevel(path::ltree)))
+                 WHERE path <@ {oldPath}::ltree
+                 AND path != {oldPath}::ltree
+                 """, cancellationToken);
+
+            return UnitResult.Success<Error>();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating department");
+            return GeneralErrors.DataBase();
+        }
     }
 }

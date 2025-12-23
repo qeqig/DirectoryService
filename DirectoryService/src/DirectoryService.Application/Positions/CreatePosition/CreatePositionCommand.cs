@@ -1,6 +1,6 @@
 ﻿using DirectoryService.Application.Abstractions;
 using DirectoryService.Contracts.Position;
 
-namespace DirectoryService.Application.CreatePosition;
+namespace DirectoryService.Application.Positions.CreatePosition;
 
 public record CreatePositionCommand(CreatePositionDto CreatePositionDto) : ICommand;

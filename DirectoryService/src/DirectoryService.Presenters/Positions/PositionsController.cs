@@ -1,5 +1,5 @@
 ﻿using DirectoryService.Application.Abstractions;
-using DirectoryService.Application.CreatePosition;
+using DirectoryService.Application.Positions.CreatePosition;
 using DirectoryService.Contracts.Position;
 using DirectoryService.Presenters.EndpointResults;
 using Microsoft.AspNetCore.Mvc;
