@@ -4,6 +4,7 @@ using DirectoryService.Infrastructure.Database;
 using DirectoryService.Infrastructure.Departments;
 using DirectoryService.Infrastructure.Locations;
 using DirectoryService.Infrastructure.Positions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -13,7 +14,7 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        services.AddScoped(s => new DirectoryServiceDbContext(configuration));
+        services.AddScoped<DirectoryServiceDbContext>(_ => new DirectoryServiceDbContext(configuration.GetConnectionString("DirectoryServiceDb")!));
 
         services.AddScoped<ILocationsRepository, LocationRepository>();
 

@@ -7,13 +7,13 @@ using Microsoft.Extensions.Logging;
 
 namespace DirectoryService.Infrastructure;
 
-public class DirectoryServiceDbContext(IConfiguration configuration) : DbContext
+public class DirectoryServiceDbContext(string connectionString) : DbContext
 {
     private const string DATABASE = "DirectoryServiceDb";
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql(configuration.GetConnectionString(DATABASE));
+        optionsBuilder.UseNpgsql(connectionString);
         optionsBuilder.UseLoggerFactory(CreateLoggerFactory());
     }
 
