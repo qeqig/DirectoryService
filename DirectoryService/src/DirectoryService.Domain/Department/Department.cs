@@ -88,7 +88,7 @@ public class Department : Entity<DepartmentId>
         if (departmentLocationList.Count == 0)
             return Error.Validation("department.location", "Department locations must contain at  least one location");
 
-        var path = parent.Path.CreateChild(identifier);
+        var path = parent.Path.CreateChild(parent, identifier);
 
         var parentId = parent.Id;
 
@@ -119,7 +119,7 @@ public class Department : Entity<DepartmentId>
         else
         {
             Depth = department.Depth + 1;
-            Path = Path.CreateChild(Identifier);
+            Path = Path.CreateChild(department, Identifier);
         }
 
         ParentId = department?.Id;

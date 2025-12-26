@@ -207,6 +207,9 @@ namespace DirectoryService.Infrastructure.Migrations
 
                             b1.HasKey("DepartmentId");
 
+                            b1.HasIndex("Value")
+                                .IsUnique();
+
                             b1.ToTable("departments");
 
                             b1.WithOwner()
@@ -225,6 +228,9 @@ namespace DirectoryService.Infrastructure.Migrations
                                 .HasColumnName("identifier");
 
                             b1.HasKey("DepartmentId");
+
+                            b1.HasIndex("Value")
+                                .IsUnique();
 
                             b1.ToTable("departments");
 
