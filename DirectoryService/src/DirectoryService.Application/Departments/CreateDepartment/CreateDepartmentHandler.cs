@@ -93,6 +93,6 @@ public class CreateDepartmentHandler : ICommandHandler<Guid, CreateDepartmentCom
 
         _logger.LogInformation("Created department {departmentId}", departmentId.Value);
 
-        return departmentId.Value;
+        return repositoryResult.Value;
     }
 }

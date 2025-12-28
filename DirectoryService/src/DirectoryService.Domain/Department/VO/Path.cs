@@ -15,8 +15,8 @@ public sealed record Path
         return new Path(identifier.Value);
     }
 
-    public Path CreateChild(Identifier childIdentifier)
+    public Path CreateChild(Department parent, Identifier childIdentifier)
     {
-        return new Path(Value + Separator + childIdentifier.Value);
+        return new Path(parent.Path.Value + Separator + childIdentifier.Value);
     }
 }
