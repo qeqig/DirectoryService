@@ -16,6 +16,9 @@ public static class DependencyInjection
     {
         services.AddScoped<DirectoryServiceDbContext>(_ => new DirectoryServiceDbContext(configuration.GetConnectionString("DirectoryServiceDb")!));
 
+        services.AddScoped<IReadDbContext,  DirectoryServiceDbContext>(_ =>
+            new DirectoryServiceDbContext(configuration.GetConnectionString("DirectoryServiceDb")!));
+
         services.AddScoped<ILocationsRepository, LocationRepository>();
 
         services.AddScoped<IDepartmentsRepository, DepartmentRepository>();

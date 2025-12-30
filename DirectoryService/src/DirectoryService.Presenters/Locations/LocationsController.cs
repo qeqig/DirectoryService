@@ -1,6 +1,8 @@
 using DirectoryService.Application.Abstractions;
 using DirectoryService.Application.Locations.CreateLocation;
+using DirectoryService.Application.Locations.GetLocation;
 using DirectoryService.Contracts.Location;
+using DirectoryService.Domain.Location;
 using DirectoryService.Presenters.EndpointResults;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,5 +25,18 @@ public class LocationsController : ControllerBase
         var command = new CreateLocationCommand(dto);
 
         return await handler.Handle(command, cancellationToken);
+    }
+
+    [HttpGet]
+    public async Task<ActionResult<GetLocationResponse>> GetLocation(
+        [FromQuery] GetLocationDto dto,
+        [FromServices] GetLocationHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var query = new GetLocationQuery(dto);
+
+        var result = await handler.Handle(query, cancellationToken);
+
+        return Ok(result.Value);
     }
 }
