@@ -1,13 +1,14 @@
-﻿using DirectoryService.Domain.Department;
+﻿using DirectoryService.Application.Database;
+using DirectoryService.Domain.Department;
 using DirectoryService.Domain.DepartmentLocations;
 using DirectoryService.Domain.Location;
+using DirectoryService.Domain.Position;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 
 namespace DirectoryService.Infrastructure;
 
-public class DirectoryServiceDbContext(string connectionString) : DbContext
+public class DirectoryServiceDbContext(string connectionString) : DbContext, IReadDbContext
 {
     private const string DATABASE = "DirectoryServiceDb";
 
@@ -33,4 +34,10 @@ public class DirectoryServiceDbContext(string connectionString) : DbContext
     public DbSet<Location> Locations => Set<Location>();
 
     public DbSet<DepartmentLocation> DepartmentLocations => Set<DepartmentLocation>();
+
+    public IQueryable<Department> DepartmentsRead => Set<Department>().AsNoTracking();
+
+    public IQueryable<Location> LocationsRead => Set<Location>().AsNoTracking();
+
+    public IQueryable<Position> PositionsRead => Set<Position>().AsNoTracking();
 }
