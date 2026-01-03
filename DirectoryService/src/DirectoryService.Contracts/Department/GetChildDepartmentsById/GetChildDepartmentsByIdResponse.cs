@@ -1,0 +1,5 @@
+﻿using DirectoryService.Contracts.Department.GetRootWithChildren;
+
+namespace DirectoryService.Contracts.Department.GetChildDepartmentsById;
+
+public record GetChildDepartmentsByIdResponse(List<DepartmentDto> Departments);

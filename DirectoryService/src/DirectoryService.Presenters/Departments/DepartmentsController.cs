@@ -1,9 +1,13 @@
 ﻿using DirectoryService.Application.Abstractions;
 using DirectoryService.Application.Departments.CreateDepartment;
+using DirectoryService.Application.Departments.GetChildDepartmentsById;
+using DirectoryService.Application.Departments.GetRootWithChildren;
 using DirectoryService.Application.Departments.GetTopDepartmentsByPosition;
 using DirectoryService.Application.Departments.MoveDepartment;
 using DirectoryService.Application.Departments.UpdateDepartmentsLocation;
 using DirectoryService.Contracts.Department.CreateDepartment;
+using DirectoryService.Contracts.Department.GetChildDepartmentsById;
+using DirectoryService.Contracts.Department.GetRootWithChildren;
 using DirectoryService.Contracts.Department.GetTopDepartmentsByPosition;
 using DirectoryService.Contracts.Department.MoveDepartments;
 using DirectoryService.Contracts.Department.UpdateDepartments;
@@ -69,6 +73,29 @@ public class DepartmentsController : ControllerBase
         CancellationToken cancellationToken)
     {
         var departments = await handler.Handle(new GetTopDepartmentsByPositionQuery(),  cancellationToken);
+
+        return Ok(departments.Value);
+    }
+
+    [HttpGet("root-with-children")]
+    public async Task<ActionResult<GetRootWithChildrenResponse>> GetRootWithChildren(
+        [FromQuery] GetRootWithChildrenDto dto,
+        [FromServices] GetRootWithChildrenHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var departments = await handler.Handle(new GetRootWithChildrenQuery(dto), cancellationToken);
+
+        return Ok(departments.Value);
+    }
+
+    [HttpGet("{parentId:Guid}/children")]
+    public async Task<ActionResult> GetChildDepartmentsById(
+        [FromRoute] Guid parentId,
+        [FromQuery] GetChildDepartmentsByIdDto dto,
+        [FromServices] GetChildDepartmentsByIdHandler handler,
+        CancellationToken cancellationToken)
+    {
+        var departments = await handler.Handle(new GetChildDepartmentsByIdQuery(parentId, dto), cancellationToken);
 
         return Ok(departments.Value);
     }

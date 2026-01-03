@@ -4,7 +4,6 @@ using DirectoryService.Infrastructure.Database;
 using DirectoryService.Infrastructure.Departments;
 using DirectoryService.Infrastructure.Locations;
 using DirectoryService.Infrastructure.Positions;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -26,6 +25,10 @@ public static class DependencyInjection
         services.AddScoped<IPositionsRepository,  PositionRepository>();
 
         services.AddScoped<ITransactionManager, TransactionManager>();
+
+        services.AddSingleton<IDbConnectionFactory, NpgsqlConnectionFactory>();
+
+        Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
         return services;
     }
