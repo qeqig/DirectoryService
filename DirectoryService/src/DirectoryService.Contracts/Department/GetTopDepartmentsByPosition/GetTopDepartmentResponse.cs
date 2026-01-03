@@ -1,0 +1,3 @@
+﻿namespace DirectoryService.Contracts.Department.GetTopDepartmentsByPosition;
+
+public record GetTopDepartmentResponse(List<TopDepartmentDto> TopDepartments);
