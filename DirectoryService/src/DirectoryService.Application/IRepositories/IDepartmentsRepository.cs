@@ -24,4 +24,6 @@ public interface IDepartmentsRepository
     Task<IReadOnlyList<Department>> GetChildWithLock(Path path, CancellationToken cancellationToken = default);
 
     Task<UnitResult<Error>> UpdateChildren(Path path, Department department, CancellationToken cancellationToken = default);
+
+    Task<UnitResult<Error>> UpdateChildAndPath(Path oldDepartmentPath, Path departmentPath, DepartmentId departmentId, CancellationToken cancellationToken = default);
 }

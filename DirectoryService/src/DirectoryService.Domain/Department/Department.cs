@@ -61,6 +61,8 @@ public class Department : Entity<DepartmentId>
 
     public DateTime UpdatedAt { get; private set; } = DateTime.UtcNow;
 
+    public DateTime? DeletedAt { get; private set; }
+
     public static Result<Department, Error> CreateParent(
         DepartmentName name,
         Identifier identifier,
@@ -125,6 +127,14 @@ public class Department : Entity<DepartmentId>
         ParentId = department?.Id;
 
         UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void SoftDelete()
+    {
+        IsActive = false;
+        DeletedAt = DateTime.UtcNow;
+        UpdatedAt = DeletedAt.Value;
+        Path = Path.CreateForSoftDelete(Path).Value;
     }
 }
 

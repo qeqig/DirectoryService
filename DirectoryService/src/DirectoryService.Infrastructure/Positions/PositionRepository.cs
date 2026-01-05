@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using DirectoryService.Application.IRepositories;
+using DirectoryService.Domain.Department.VO;
 using DirectoryService.Domain.Position;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -55,6 +56,34 @@ public class PositionRepository : IPositionsRepository
         {
             _logger.LogError(ex, "Error while adding a position with the name {name}", name);
             return GeneralErrors.DataBase();
+        }
+    }
+
+    public async Task<UnitResult<Errors>> DeactivatePosition(DepartmentId departmentId, CancellationToken cancellationToken = default)
+    {
+        var depId = departmentId.Value;
+
+        try
+        {
+            await _dbContext.Database.ExecuteSqlAsync(
+                $"""
+                                                  WITH lock_positions AS (SELECT d.position_id
+                                                                          FROM department_positions d
+                                                                          JOIN positions p ON d.position_id = p.id
+                                                                          WHERE d.department_id = {depId}
+                                                                          AND p.is_active = true
+                                                                          FOR UPDATE)
+                                                  UPDATE positions
+                                                  SET is_active = false,
+                                                  updated_at = now()
+                                                  WHERE id in (SELECT position_id FROM lock_positions)
+                                                  """, cancellationToken);
+            return Result.Success<Errors>();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error while deactivating a position with the name {name}", depId);
+            return GeneralErrors.DataBase().ToErrors();
         }
     }
 }
