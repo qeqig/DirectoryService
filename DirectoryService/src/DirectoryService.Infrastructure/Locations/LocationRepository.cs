@@ -1,5 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 using DirectoryService.Application.IRepositories;
+using DirectoryService.Domain.Department.VO;
 using DirectoryService.Domain.Location;
 using DirectoryService.Domain.Location.VO;
 using Microsoft.EntityFrameworkCore;
@@ -94,5 +95,33 @@ public class LocationRepository : ILocationsRepository
         }
 
         return locations;
+    }
+
+    public async Task<UnitResult<Errors>> DeactivateLocations(DepartmentId departmentId, CancellationToken cancellationToken = default)
+    {
+        var depId = departmentId.Value;
+
+        try
+        {
+            await _dbContext.Database.ExecuteSqlAsync(
+                $"""
+                                                       WITH lock_locations AS (SELECT d.location_id
+                                                                          FROM department_locations d
+                                                                          JOIN locations l ON d.location_id = l.id
+                                                                          WHERE d.department_id = {depId}
+                                                                          AND l.is_active = true
+                                                                          FOR UPDATE)
+                                                       UPDATE locations
+                                                       SET is_active = false,
+                                                           updated_at = now()
+                                                       WHERE id in (SELECT location_id FROM lock_locations)
+                                                       """, cancellationToken);
+            return UnitResult.Success<Errors>();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error deactivating locations");
+            return GeneralErrors.DataBase().ToErrors();
+        }
     }
 }

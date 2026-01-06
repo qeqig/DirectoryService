@@ -1,5 +1,6 @@
 ﻿using DirectoryService.Application.Abstractions;
 using DirectoryService.Application.Departments.CreateDepartment;
+using DirectoryService.Application.Departments.DeleteDepartment;
 using DirectoryService.Application.Departments.GetChildDepartmentsById;
 using DirectoryService.Application.Departments.GetRootWithChildren;
 using DirectoryService.Application.Departments.GetTopDepartmentsByPosition;
@@ -98,5 +99,16 @@ public class DepartmentsController : ControllerBase
         var departments = await handler.Handle(new GetChildDepartmentsByIdQuery(parentId, dto), cancellationToken);
 
         return Ok(departments.Value);
+    }
+
+    [HttpDelete("{departmentId:guid}")]
+    public async Task<EndpointResult<Guid>> SoftDeleteDepartment(
+        [FromRoute] Guid departmentId,
+        [FromServices] ICommandHandler<Guid, DeleteDepartmentCommand> handler,
+        CancellationToken cancellationToken)
+    {
+        var command = new DeleteDepartmentCommand(departmentId);
+
+        return await handler.Handle(command, cancellationToken);
     }
 }

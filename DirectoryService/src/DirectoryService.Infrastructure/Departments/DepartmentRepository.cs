@@ -95,6 +95,7 @@ public class DepartmentRepository : IDepartmentsRepository
                 is_active,
                 created_at,
                 updated_at,
+                deleted_at,
                 name,
                 identifier,
                 path
@@ -121,6 +122,7 @@ public class DepartmentRepository : IDepartmentsRepository
                 is_active,
                 created_at,
                 updated_at,
+                deleted_at,
                 name,
                 identifier,
                 path
@@ -150,6 +152,32 @@ public class DepartmentRepository : IDepartmentsRepository
                  AND path != {oldPath}::ltree
                  """, cancellationToken);
 
+            return UnitResult.Success<Error>();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error updating department");
+            return GeneralErrors.DataBase();
+        }
+    }
+
+    public async Task<UnitResult<Error>> UpdateChildAndPath(Path oldDepartmentPath, Path departmentPath, DepartmentId departmentId, CancellationToken cancellationToken = default)
+    {
+        var oldPath = oldDepartmentPath.Value;
+
+        var newPath = departmentPath.Value;
+
+        var depId = departmentId.Value;
+
+        try
+        {
+            await _dbContext.Database.ExecuteSqlAsync($"""
+                                                       UPDATE departments
+                                                       SET path = ({newPath}::ltree || subpath(path, nlevel({oldPath}::ltree), nlevel(path::ltree))),
+                                                           updated_at = now()
+                                                       WHERE path <@ {oldPath}::ltree
+                                                       AND path != {oldPath}::ltree
+                                                       """);
             return UnitResult.Success<Error>();
         }
         catch (Exception ex)
