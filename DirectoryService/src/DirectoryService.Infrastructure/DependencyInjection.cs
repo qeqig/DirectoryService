@@ -1,5 +1,6 @@
 ﻿using DirectoryService.Application.Database;
 using DirectoryService.Application.IRepositories;
+using DirectoryService.Infrastructure.BackgroundServices;
 using DirectoryService.Infrastructure.Database;
 using DirectoryService.Infrastructure.Departments;
 using DirectoryService.Infrastructure.Locations;
@@ -27,6 +28,8 @@ public static class DependencyInjection
         services.AddScoped<ITransactionManager, TransactionManager>();
 
         services.AddSingleton<IDbConnectionFactory, NpgsqlConnectionFactory>();
+
+        services.AddHostedService<DeleteDepartmentService>();
 
         Dapper.DefaultTypeMap.MatchNamesWithUnderscores = true;
 
