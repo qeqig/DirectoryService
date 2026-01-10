@@ -24,7 +24,7 @@ public class PositionConfiguration : IEntityTypeConfiguration<Position>
         {
             nb.Property(p => p.Value)
                 .IsRequired()
-                .HasMaxLength(LengthConstant.LENGTH_500)
+                .HasMaxLength(Constants.LENGTH_500)
                 .HasColumnName("name");
         });
 
@@ -32,7 +32,7 @@ public class PositionConfiguration : IEntityTypeConfiguration<Position>
         {
             nb.Property(p => p.Value)
                 .IsRequired(false)
-                .HasMaxLength(LengthConstant.LENGTH_500)
+                .HasMaxLength(Constants.LENGTH_500)
                 .HasColumnName("description");
         });
 

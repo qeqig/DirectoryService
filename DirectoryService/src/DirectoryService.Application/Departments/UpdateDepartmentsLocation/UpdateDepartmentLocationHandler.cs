@@ -3,10 +3,12 @@ using DirectoryService.Application.Abstractions;
 using DirectoryService.Application.Database;
 using DirectoryService.Application.IRepositories;
 using DirectoryService.Contracts.Department.UpdateDepartments;
+using DirectoryService.Domain;
 using DirectoryService.Domain.Department.VO;
 using DirectoryService.Domain.DepartmentLocations;
 using DirectoryService.Domain.Location.VO;
 using FluentValidation;
+using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Logging;
 using Shared;
 
@@ -19,19 +21,22 @@ public class UpdateDepartmentLocationHandler : ICommandHandler<Guid, UpdateDepar
     private readonly IValidator<UpdateDepartmentLocationDto> _validator;
     private readonly ITransactionManager _transactionManager;
     private readonly ILogger<UpdateDepartmentLocationHandler> _logger;
+    private readonly HybridCache _cache;
 
     public UpdateDepartmentLocationHandler(
         IDepartmentsRepository departmentsRepository,
         ILocationsRepository locationsRepository,
         IValidator<UpdateDepartmentLocationDto> validator,
         ITransactionManager transactionManager,
-        ILogger<UpdateDepartmentLocationHandler> logger)
+        ILogger<UpdateDepartmentLocationHandler> logger,
+        HybridCache cache)
     {
         _departmentsRepository = departmentsRepository;
         _locationsRepository = locationsRepository;
         _validator = validator;
         _transactionManager = transactionManager;
         _logger = logger;
+        _cache = cache;
     }
 
     public async Task<Result<Guid, Errors>> Handle(UpdateDepartmentLocationCommand command, CancellationToken cancellationToken = default)
@@ -79,6 +84,8 @@ public class UpdateDepartmentLocationHandler : ICommandHandler<Guid, UpdateDepar
 
          if (commitedResult.IsFailure)
              return commitedResult.Error.ToErrors();
+
+         await _cache.RemoveByTagAsync(Constants.DEPARTMENT_CACHE_KEY, cancellationToken);
 
          _logger.LogInformation("Department {departmentId} location updated successfully", department.Id);
 

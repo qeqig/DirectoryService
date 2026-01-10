@@ -36,6 +36,16 @@ services:
     volumes:
       - seq_data:/var/lib/seq
 
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: always
+    
 volumes:
   postgres-data:
   seq_data:
+  redis-data:

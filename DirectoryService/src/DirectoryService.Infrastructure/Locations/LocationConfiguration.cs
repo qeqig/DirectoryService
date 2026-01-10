@@ -24,7 +24,7 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
         {
             nb.Property(v => v.Value)
                 .IsRequired()
-                .HasMaxLength(LengthConstant.LENGTH_500)
+                .HasMaxLength(Constants.LENGTH_500)
                 .HasColumnName("name");
         });
 
@@ -48,7 +48,7 @@ public class LocationConfiguration : IEntityTypeConfiguration<Location>
         builder.ComplexProperty(l => l.LocationTimezone, nb =>
         {
             nb.Property(l => l.Value)
-                .HasMaxLength(LengthConstant.LENGTH_500)
+                .HasMaxLength(Constants.LENGTH_500)
                 .IsRequired()
                 .HasColumnName("time_zone");
         });
