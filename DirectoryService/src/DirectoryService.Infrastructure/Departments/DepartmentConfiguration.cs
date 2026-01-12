@@ -24,7 +24,7 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
         {
             nb.Property(v => v.Value)
                 .IsRequired()
-                .HasMaxLength(LengthConstant.LENGTH_500)
+                .HasMaxLength(Constants.LENGTH_500)
                 .HasColumnName("name");
         });
 
@@ -32,7 +32,7 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
         {
             nb.Property(v => v.Value)
                 .IsRequired()
-                .HasMaxLength(LengthConstant.LENGTH_500)
+                .HasMaxLength(Constants.LENGTH_500)
                 .HasColumnName("identifier");
         });
 
@@ -45,7 +45,7 @@ public class DepartmentConfiguration : IEntityTypeConfiguration<Department>
             nb.Property(p => p.Value)
                 .IsRequired()
                 .HasColumnType("ltree")
-                .HasMaxLength(LengthConstant.LENGTH_500)
+                .HasMaxLength(Constants.LENGTH_500)
                 .HasColumnName("path");
 
             nb.HasIndex(p => p.Value)

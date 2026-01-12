@@ -2,11 +2,13 @@
 using DirectoryService.Application.Abstractions;
 using DirectoryService.Application.IRepositories;
 using DirectoryService.Contracts.Department.CreateDepartment;
+using DirectoryService.Domain;
 using DirectoryService.Domain.Department;
 using DirectoryService.Domain.Department.VO;
 using DirectoryService.Domain.DepartmentLocations;
 using DirectoryService.Domain.Location.VO;
 using FluentValidation;
+using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Logging;
 using Shared;
 
@@ -22,16 +24,19 @@ public class CreateDepartmentHandler : ICommandHandler<Guid, CreateDepartmentCom
 
     private readonly ILogger<CreateDepartmentHandler> _logger;
 
+    private readonly HybridCache _cache;
+
     public CreateDepartmentHandler(
         ILocationsRepository locationsRepository,
         IDepartmentsRepository departmentsRepository,
         IValidator<CreateDepartmentDto> validator,
-        ILogger<CreateDepartmentHandler> logger)
+        ILogger<CreateDepartmentHandler> logger, HybridCache cache)
     {
         _locationsRepository = locationsRepository;
         _departmentsRepository = departmentsRepository;
         _validator = validator;
         _logger = logger;
+        _cache = cache;
     }
 
     public async Task<Result<Guid, Errors>> Handle(CreateDepartmentCommand command, CancellationToken cancellationToken = default)
@@ -90,6 +95,8 @@ public class CreateDepartmentHandler : ICommandHandler<Guid, CreateDepartmentCom
 
         if (repositoryResult.IsFailure)
             return Error.Failure(null, repositoryResult.Error.Message).ToErrors();
+
+        await _cache.RemoveByTagAsync(Constants.DEPARTMENT_CACHE_KEY, cancellationToken);
 
         _logger.LogInformation("Created department {departmentId}", departmentId.Value);
 

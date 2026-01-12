@@ -1,6 +1,4 @@
 ﻿using DirectoryService.Application;
-using Serilog;
-using Serilog.Exceptions;
 
 namespace DirectoryService.Presentation;
 
@@ -19,6 +17,21 @@ public static class DependencyInjection
     {
         services.AddControllers();
         services.AddOpenApi();
+
+        return services;
+    }
+
+    public static IServiceCollection AddDistributedCache(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddStackExchangeRedisCache(options =>
+        {
+            string connectionString = configuration.GetConnectionString("Redis") ??
+                                      throw new ArgumentNullException(nameof(connectionString));
+
+            options.Configuration = connectionString;
+        });
+
+        services.AddHybridCache();
 
         return services;
     }

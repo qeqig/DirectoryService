@@ -2,7 +2,9 @@
 using DirectoryService.Application.Abstractions;
 using DirectoryService.Application.Database;
 using DirectoryService.Application.IRepositories;
+using DirectoryService.Domain;
 using DirectoryService.Domain.Department.VO;
+using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Logging;
 using Shared;
 
@@ -20,18 +22,22 @@ public class DeleteDepartmentHandler : ICommandHandler<Guid, DeleteDepartmentCom
 
     private readonly ILogger<DeleteDepartmentHandler> _logger;
 
+    private readonly HybridCache _cache;
+
     public DeleteDepartmentHandler(
         IDepartmentsRepository departmentsRepository,
         ILocationsRepository locationsRepository,
         IPositionsRepository positionsRepository,
         ITransactionManager transactionManager,
-        ILogger<DeleteDepartmentHandler> logger)
+        ILogger<DeleteDepartmentHandler> logger,
+        HybridCache cache)
     {
         _departmentsRepository = departmentsRepository;
         _locationsRepository = locationsRepository;
         _positionsRepository = positionsRepository;
         _transactionManager = transactionManager;
         _logger = logger;
+        _cache = cache;
     }
 
     public async Task<Result<Guid, Errors>> Handle(DeleteDepartmentCommand command, CancellationToken cancellationToken = default)
@@ -102,6 +108,8 @@ public class DeleteDepartmentHandler : ICommandHandler<Guid, DeleteDepartmentCom
         var commitResult = transactionScope.Commit();
         if (commitResult.IsFailure)
             return commitResult.Error.ToErrors();
+
+        await _cache.RemoveByTagAsync(Constants.DEPARTMENT_CACHE_KEY, cancellationToken);
 
         _logger.LogInformation("Department deleted");
 

@@ -19,6 +19,8 @@ try
 
     builder.Services.AddInfrastructure(builder.Configuration);
 
+    builder.Services.AddDistributedCache(builder.Configuration);
+
     var app = builder.Build();
 
     if (app.Environment.IsDevelopment() || app.Environment.IsEnvironment("Docker"))

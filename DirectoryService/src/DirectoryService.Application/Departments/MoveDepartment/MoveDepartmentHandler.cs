@@ -2,9 +2,11 @@
 using DirectoryService.Application.Abstractions;
 using DirectoryService.Application.Database;
 using DirectoryService.Application.IRepositories;
+using DirectoryService.Domain;
 using DirectoryService.Domain.Department;
 using DirectoryService.Domain.Department.VO;
 using FluentValidation;
+using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Logging;
 using Shared;
 
@@ -20,16 +22,20 @@ public class MoveDepartmentHandler : ICommandHandler<Guid, MoveDepartmentCommand
 
     private readonly ILogger<MoveDepartmentHandler> _logger;
 
+    private readonly HybridCache _cache;
+
     public MoveDepartmentHandler(
         ITransactionManager transactionManager,
         IDepartmentsRepository departmentsRepository,
         IValidator<MoveDepartmentCommand> validator,
-        ILogger<MoveDepartmentHandler> logger)
+        ILogger<MoveDepartmentHandler> logger,
+        HybridCache cache)
     {
         _transactionManager = transactionManager;
         _departmentsRepository = departmentsRepository;
         _validator = validator;
         _logger = logger;
+        _cache = cache;
     }
 
     public async Task<Result<Guid, Errors>> Handle(MoveDepartmentCommand command, CancellationToken cancellationToken)
@@ -125,6 +131,8 @@ public class MoveDepartmentHandler : ICommandHandler<Guid, MoveDepartmentCommand
 
         if (commitedResult.IsFailure)
                 return commitedResult.Error.ToErrors();
+
+        await _cache.RemoveByTagAsync(Constants.DEPARTMENT_CACHE_KEY, cancellationToken);
 
         _logger.LogInformation("department moved");
 
