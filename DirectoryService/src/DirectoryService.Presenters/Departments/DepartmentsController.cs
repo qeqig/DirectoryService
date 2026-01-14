@@ -1,4 +1,4 @@
-﻿using DirectoryService.Application.Abstractions;
+﻿using Core.Abstractions;
 using DirectoryService.Application.Departments.CreateDepartment;
 using DirectoryService.Application.Departments.DeleteDepartment;
 using DirectoryService.Application.Departments.GetChildDepartmentsById;
@@ -12,7 +12,7 @@ using DirectoryService.Contracts.Department.GetRootWithChildren;
 using DirectoryService.Contracts.Department.GetTopDepartmentsByPosition;
 using DirectoryService.Contracts.Department.MoveDepartments;
 using DirectoryService.Contracts.Department.UpdateDepartments;
-using DirectoryService.Presenters.EndpointResults;
+using Framework.EndpointResults;
 using Microsoft.AspNetCore.Mvc;
 
 namespace DirectoryService.Presenters.Departments;

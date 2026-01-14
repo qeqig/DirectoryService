@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
 using FluentValidation.Results;
-using Shared;
+using Shared.SharedKernel;
 
-namespace DirectoryService.Application.Validation;
+namespace Core.Validation;
 
 public static class ValidationExtension
 {

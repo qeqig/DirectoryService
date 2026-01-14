@@ -5,7 +5,7 @@ using DirectoryService.Domain.Position;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Npgsql;
-using Shared;
+using Shared.SharedKernel;
 
 namespace DirectoryService.Infrastructure.Positions;
 

@@ -1,5 +1,5 @@
 ﻿using CSharpFunctionalExtensions;
-using Shared;
+using Shared.SharedKernel;
 
 namespace DirectoryService.Domain.Department.VO;
 
@@ -7,6 +7,7 @@ public sealed record DepartmentName
 {
     public const int MAX_LENGTH = 150;
     public const int MIN_LENGTH = 3;
+
     private DepartmentName(string value)
     {
         Value = value;

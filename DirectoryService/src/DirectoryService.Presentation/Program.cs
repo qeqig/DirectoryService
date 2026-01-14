@@ -1,7 +1,7 @@
 using System.Globalization;
 using DirectoryService.Infrastructure;
 using DirectoryService.Presentation;
-using DirectoryService.Presentation.Middlewares;
+using Framework.Middlewares;
 using Serilog;
 
 Log.Logger = new LoggerConfiguration()

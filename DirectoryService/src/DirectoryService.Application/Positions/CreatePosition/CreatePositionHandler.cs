@@ -1,5 +1,5 @@
-﻿using CSharpFunctionalExtensions;
-using DirectoryService.Application.Abstractions;
+﻿using Core.Abstractions;
+using CSharpFunctionalExtensions;
 using DirectoryService.Application.IRepositories;
 using DirectoryService.Contracts.Position;
 using DirectoryService.Domain.Department.VO;
@@ -8,7 +8,7 @@ using DirectoryService.Domain.Position;
 using DirectoryService.Domain.Position.VO;
 using FluentValidation;
 using Microsoft.Extensions.Logging;
-using Shared;
+using Shared.SharedKernel;
 
 namespace DirectoryService.Application.Positions.CreatePosition;
 

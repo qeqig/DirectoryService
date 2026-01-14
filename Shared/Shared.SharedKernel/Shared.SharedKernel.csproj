@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageId>qeqig.SharedKernel</PackageId>
+    <Version>0.0.1</Version>
+    <Authors>qeqig</Authors>
+    <Company>qeqig</Company>
+    <PackageDescription>SharedKernel</PackageDescription>
+    <RepositoryUrl>https://github.com/qeqig/DirectoryService</RepositoryUrl>
+  </PropertyGroup>
+
+</Project>

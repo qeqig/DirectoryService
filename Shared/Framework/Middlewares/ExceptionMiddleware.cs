@@ -1,4 +1,7 @@
-﻿namespace DirectoryService.Presentation.Middlewares;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Logging;
+
+namespace Framework.Middlewares;
 
 public class ExceptionMiddleware
 {

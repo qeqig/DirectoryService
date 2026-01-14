@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  
+  <ItemGroup>
+    <ProjectReference Include="..\Shared.SharedKernel\Shared.SharedKernel.csproj" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <PackageReference Include="CSharpFunctionalExtensions" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <PackageId>qeqig.Framefork</PackageId>
+    <Version>0.0.1</Version>
+    <Authors>qeqig</Authors>
+    <Company>qeqig</Company>
+    <PackageDescription>Framefork</PackageDescription>
+    <RepositoryUrl>https://github.com/qeqig/DirectoryService</RepositoryUrl>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+  
+</Project>

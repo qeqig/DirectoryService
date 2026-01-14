@@ -1,4 +1,4 @@
-﻿using DirectoryService.Application.Abstractions;
+﻿using Core.Abstractions;
 using DirectoryService.Contracts.Department.MoveDepartments;
 
 namespace DirectoryService.Application.Departments.MoveDepartment;

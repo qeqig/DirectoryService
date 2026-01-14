@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Shared;
+using Shared.SharedKernel;
 
-namespace DirectoryService.Presenters.EndpointResults;
+namespace Framework.EndpointResults;
 
 public sealed class ErrorResult : IResult
 {
@@ -50,6 +50,6 @@ public sealed class ErrorResult : IResult
             ErrorType.NOT_FOUND => StatusCodes.Status404NotFound,
             ErrorType.CONFLICT => StatusCodes.Status409Conflict,
             ErrorType.FAILURE => StatusCodes.Status500InternalServerError,
-            _ => StatusCodes.Status500InternalServerError
+            _ => StatusCodes.Status500InternalServerError,
         };
 }

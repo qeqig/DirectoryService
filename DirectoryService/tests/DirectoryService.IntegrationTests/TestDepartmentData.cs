@@ -2,7 +2,7 @@
 using DirectoryService.Domain.Department;
 using DirectoryService.Domain.Location;
 using DirectoryService.Infrastructure;
-using Shared;
+using Shared.SharedKernel;
 
 namespace DirectoryService.IntegrationTests;
 

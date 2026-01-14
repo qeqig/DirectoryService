@@ -1,6 +1,6 @@
-﻿using Shared;
+﻿using Shared.SharedKernel;
 
-namespace DirectoryService.Presenters.EndpointResults;
+namespace Framework.EndpointResults;
 
 public record Envelope
 {
