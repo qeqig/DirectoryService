@@ -5,7 +5,7 @@ using DirectoryService.Domain.Department;
 using DirectoryService.Domain.Department.VO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Shared;
+using Shared.SharedKernel;
 using Path = DirectoryService.Domain.Department.VO.Path;
 
 namespace DirectoryService.Infrastructure.Departments;

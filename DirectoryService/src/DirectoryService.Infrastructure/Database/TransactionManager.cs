@@ -4,7 +4,7 @@ using DirectoryService.Application.Database;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.Extensions.Logging;
-using Shared;
+using Shared.SharedKernel;
 
 namespace DirectoryService.Infrastructure.Database;
 
@@ -28,7 +28,7 @@ public class TransactionManager : ITransactionManager
     {
         try
         {
-            var transaction = await _dbContext.Database.BeginTransactionAsync(isolationLevel ?? IsolationLevel.ReadCommitted,cancellationToken);
+            var transaction = await _dbContext.Database.BeginTransactionAsync(isolationLevel ?? IsolationLevel.ReadCommitted, cancellationToken);
 
             var transactionCreateLogger = _loggerFactory.CreateLogger<TransactionScope>();
 

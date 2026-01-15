@@ -1,6 +1,6 @@
 ﻿using CSharpFunctionalExtensions;
 
-namespace DirectoryService.Application.Abstractions;
+namespace Core.Abstractions;
 
 public interface IQueryHandler<TResponse, in TQuery>
     where TQuery : IQuery

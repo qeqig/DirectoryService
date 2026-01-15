@@ -2,7 +2,7 @@
 using DirectoryService.Domain.Department.VO;
 using DirectoryService.Domain.Location;
 using DirectoryService.Domain.Location.VO;
-using Shared;
+using Shared.SharedKernel;
 
 namespace DirectoryService.Application.IRepositories;
 

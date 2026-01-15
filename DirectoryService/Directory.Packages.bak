@@ -1,0 +1,8 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Здесь добавляются пакеты: <PackageVersion Include="Пакет" Version="1.0.0" /> -->
+  </ItemGroup>
+</Project>

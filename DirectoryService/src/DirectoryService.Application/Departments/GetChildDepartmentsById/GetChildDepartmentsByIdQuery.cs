@@ -1,4 +1,4 @@
-﻿using DirectoryService.Application.Abstractions;
+﻿using Core.Abstractions;
 using DirectoryService.Contracts.Department.GetChildDepartmentsById;
 
 namespace DirectoryService.Application.Departments.GetChildDepartmentsById;

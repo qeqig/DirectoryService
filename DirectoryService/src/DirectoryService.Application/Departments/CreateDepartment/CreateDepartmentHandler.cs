@@ -1,5 +1,5 @@
-﻿using CSharpFunctionalExtensions;
-using DirectoryService.Application.Abstractions;
+﻿using Core.Abstractions;
+using CSharpFunctionalExtensions;
 using DirectoryService.Application.IRepositories;
 using DirectoryService.Contracts.Department.CreateDepartment;
 using DirectoryService.Domain;
@@ -10,7 +10,7 @@ using DirectoryService.Domain.Location.VO;
 using FluentValidation;
 using Microsoft.Extensions.Caching.Hybrid;
 using Microsoft.Extensions.Logging;
-using Shared;
+using Shared.SharedKernel;
 
 namespace DirectoryService.Application.Departments.CreateDepartment;
 

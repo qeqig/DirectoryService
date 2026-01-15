@@ -2,7 +2,7 @@
 using DirectoryService.Domain.Department.VO;
 using DirectoryService.Domain.DepartmentLocations;
 using DirectoryService.Domain.DepartmentPositions;
-using Shared;
+using Shared.SharedKernel;
 using Path = DirectoryService.Domain.Department.VO.Path;
 
 namespace DirectoryService.Domain.Department;
@@ -137,4 +137,3 @@ public class Department : Entity<DepartmentId>
         Path = Path.CreateForSoftDelete(Path).Value;
     }
 }
-

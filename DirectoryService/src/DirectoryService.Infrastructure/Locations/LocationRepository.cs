@@ -6,7 +6,7 @@ using DirectoryService.Domain.Location.VO;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Npgsql;
-using Shared;
+using Shared.SharedKernel;
 
 namespace DirectoryService.Infrastructure.Locations;
 

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Shared;
+namespace Shared.SharedKernel;
 
 public static class KeyBuilder
 {

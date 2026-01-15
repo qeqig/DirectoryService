@@ -1,7 +1,7 @@
 ﻿using CSharpFunctionalExtensions;
 using DirectoryService.Domain.Department.VO;
 using DirectoryService.Domain.Position;
-using Shared;
+using Shared.SharedKernel;
 
 namespace DirectoryService.Application.IRepositories;
 

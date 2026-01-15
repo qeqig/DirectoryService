@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <ItemGroup>
+      <PackageReference Include="CSharpFunctionalExtensions" />
+      <PackageReference Include="FluentValidation" />
+    </ItemGroup>
+
+  <PropertyGroup>
+    <PackageId>qeqig.Core</PackageId>
+    <Version>0.0.1</Version>
+    <Authors>qeqig</Authors>
+    <Company>qeqig</Company>
+    <PackageDescription>Core</PackageDescription>
+    <RepositoryUrl>https://github.com/qeqig/DirectoryService</RepositoryUrl>
+  </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Shared.SharedKernel\Shared.SharedKernel.csproj" />
+    </ItemGroup>
+
+</Project>

@@ -1,7 +1,7 @@
 ﻿using System.Net;
 using Microsoft.AspNetCore.Http;
 
-namespace DirectoryService.Presenters.EndpointResults;
+namespace Framework.EndpointResults;
 
 public class SuccessResult<TValue> : IResult
 {
