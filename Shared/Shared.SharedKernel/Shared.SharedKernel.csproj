@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>qeqig.SharedKernel</PackageId>
-    <Version>0.0.1</Version>
+    <Version>0.0.2</Version>
     <Authors>qeqig</Authors>
     <Company>qeqig</Company>
     <PackageDescription>SharedKernel</PackageDescription>
