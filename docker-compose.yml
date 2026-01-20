@@ -1,14 +1,14 @@
 services:
-  directory-service:
-    container_name: directory-service
-    build:
-      context: .
-      dockerfile: Dockerfile
-    ports: 
-        - "5219:5219"
-    environment:
-      - ASPNETCORE_ENVIRONMENT=Docker
-      - ASPNETCORE_URLS=http://+:5219
+#  directory-service:
+#    container_name: directory-service
+#    build:
+#      context: .
+#      dockerfile: Dockerfile
+#    ports: 
+#        - "5219:5219"
+#    environment:
+#      - ASPNETCORE_ENVIRONMENT=Docker
+#      - ASPNETCORE_URLS=http://+:5219
   
   postgres:
     container_name: postgres
@@ -43,6 +43,18 @@ services:
       - "6379:6379"
     volumes:
       - redis-data:/data
+    restart: always
+    
+  minio:
+    container_name: minio
+    image: minio/minio:latest
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    command: server --console-address ":9001" /data
     restart: always
     
 volumes:

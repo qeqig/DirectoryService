@@ -6,11 +6,16 @@
   
   <ItemGroup>
     <PackageReference Include="CSharpFunctionalExtensions" />
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
+    <PackageReference Include="Serilog" />
+    <PackageReference Include="Serilog.AspNetCore" />
+    <PackageReference Include="Serilog.Exceptions" />
+    <PackageReference Include="Swashbuckle.AspNetCore" />
   </ItemGroup>
 
   <PropertyGroup>
     <PackageId>qeqig.Framefork</PackageId>
-    <Version>0.0.1</Version>
+    <Version>0.0.3</Version>
     <Authors>qeqig</Authors>
     <Company>qeqig</Company>
     <PackageDescription>Framefork</PackageDescription>
