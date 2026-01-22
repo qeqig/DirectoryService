@@ -9,6 +9,8 @@ public sealed record ContentType
 
     public MediaType Category { get; }
 
+    private ContentType() { }
+
     private ContentType(string value, MediaType category)
     {
         Value = value;
