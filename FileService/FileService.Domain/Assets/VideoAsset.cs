@@ -16,6 +16,8 @@ public class VideoAsset : MediaAsset
 
     public StorageKey HlsRootKey { get; private set; }
 
+    protected VideoAsset() { }
+
     private VideoAsset(
         Guid id,
         MediaData mediaData,

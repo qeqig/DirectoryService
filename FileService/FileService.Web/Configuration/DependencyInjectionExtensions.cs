@@ -1,4 +1,5 @@
 using FileService.Core;
+using FileService.Infrastructure.Postgres;
 using FileService.Infrastructure.S3;
 using Framework.EndpointResults;
 using Framework.Logging;
@@ -14,9 +15,17 @@ public static class DependencyInjectionExtensions
             .AddLogging(configuration, "FileService")
             .AddOpenApiSpec("FileService", "v1")
             .AddEndpoints(typeof(DependencyInjectionCoreExtensions).Assembly)
+            .AddInfrastructureServices(configuration)
             .AddS3(configuration);
 
         services.AddCore(configuration);
+
+        return services;
+    }
+
+    private static IServiceCollection AddInfrastructureServices(this IServiceCollection services, IConfiguration configuration)
+    {
+        services.AddScoped<FileServiceDbContext>(_ => new FileServiceDbContext(configuration.GetConnectionString("FileServiceDb")!));
 
         return services;
     }

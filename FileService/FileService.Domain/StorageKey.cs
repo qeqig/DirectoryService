@@ -15,6 +15,8 @@ public sealed record StorageKey
 
     public string FullPath { get; }
 
+    private StorageKey() { }
+
     private StorageKey(string bucket, string prefix, string key)
     {
         Bucket = bucket;
