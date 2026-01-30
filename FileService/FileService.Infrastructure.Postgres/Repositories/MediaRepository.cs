@@ -1,6 +1,8 @@
+using System.Linq.Expressions;
 using CSharpFunctionalExtensions;
 using FileService.Core;
 using FileService.Domain;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Shared.SharedKernel;
 
@@ -31,6 +33,45 @@ public class MediaRepository : IMediaRepository
         {
             _logger.LogError(ex.Message);
             return GeneralErrors.ValueIsInvalid();
+        }
+    }
+
+    public async Task<Result<MediaAsset, Error>> GetBy(
+        Expression<Func<MediaAsset, bool>> predicate,
+        CancellationToken cancellationToken = default)
+    {
+        var record = await _dbContext.MediaAssets.FirstOrDefaultAsync(predicate, cancellationToken);
+
+        if (record is null)
+            return GeneralErrors.NotFound(null, "media");
+
+        return record;
+    }
+
+    public async Task<Result<IReadOnlyList<MediaAsset>, Error>> GetManyBy(
+        Expression<Func<MediaAsset, bool>> predicate,
+        CancellationToken cancellationToken = default)
+    {
+        var records = await _dbContext.MediaAssets.Where(predicate).ToListAsync(cancellationToken);
+
+        if (records.Count == 0)
+            return GeneralErrors.NotFound(null, "media");
+
+        return records;
+    }
+
+    public async Task<UnitResult<Error>> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            await _dbContext.SaveChangesAsync(cancellationToken);
+            return UnitResult.Success<Error>();
+
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex.Message);
+            return UnitResult.Failure(Error.Failure("save.change.error", "Error saving media asset."));
         }
     }
 }
