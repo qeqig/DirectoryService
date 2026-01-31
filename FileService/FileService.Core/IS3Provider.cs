@@ -8,14 +8,12 @@ namespace FileService.Core;
 public interface IS3Provider
 {
     Task<Result<string, Error>> StartMultipartUploadAsync(
-        string bucketName,
-        string key,
+        StorageKey storageKey,
         string contentType,
         CancellationToken cancellationToken = default);
 
     Task<Result<IReadOnlyList<string>, Error>> GenerateAllChunksUploadUrlsAsync(
-        string bucketName,
-        string key,
+        StorageKey storageKey,
         string uploadId,
         int totalChunks,
         CancellationToken cancellationToken = default);
@@ -23,8 +21,7 @@ public interface IS3Provider
     Task<Result<string, Error>> GenerateDownloadUrlAsync(StorageKey storageKey);
 
     Task<Result<string, Error>> CompleteMultipartUploadAsync(
-        string bucketName,
-        string key,
+        StorageKey storageKey,
         string uploadId,
         IReadOnlyList<PartETagDto> partETags,
         CancellationToken cancellationToken = default);

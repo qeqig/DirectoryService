@@ -27,8 +27,7 @@ public class S3Provider : IS3Provider
     }
 
     public async Task<Result<string, Error>> StartMultipartUploadAsync(
-        string bucketName,
-        string key,
+        StorageKey storageKey,
         string contentType,
         CancellationToken cancellationToken = default)
     {
@@ -36,8 +35,8 @@ public class S3Provider : IS3Provider
         {
             var request = new InitiateMultipartUploadRequest
             {
-                BucketName = bucketName,
-                Key = key,
+                BucketName = storageKey.Bucket,
+                Key = storageKey.Key,
                 ContentType = contentType,
             };
 
@@ -53,8 +52,7 @@ public class S3Provider : IS3Provider
     }
 
     public async Task<Result<IReadOnlyList<string>, Error>> GenerateAllChunksUploadUrlsAsync(
-        string bucketName,
-        string key,
+        StorageKey storageKey,
         string uploadId,
         int totalChunks,
         CancellationToken cancellationToken = default)
@@ -70,8 +68,8 @@ public class S3Provider : IS3Provider
                     {
                         var request = new GetPreSignedUrlRequest
                         {
-                            BucketName = bucketName,
-                            Key = key,
+                            BucketName = storageKey.Bucket,
+                            Key = storageKey.Value,
                             Verb = HttpVerb.PUT,
                             UploadId = uploadId,
                             PartNumber = partNumber,
@@ -125,8 +123,7 @@ public class S3Provider : IS3Provider
     }
 
     public async Task<Result<string, Error>> CompleteMultipartUploadAsync(
-        string bucketName,
-        string key,
+        StorageKey storageKey,
         string uploadId,
         IReadOnlyList<PartETagDto> partETags,
         CancellationToken cancellationToken = default)
@@ -135,8 +132,8 @@ public class S3Provider : IS3Provider
         {
             var request = new CompleteMultipartUploadRequest
             {
-                BucketName = bucketName,
-                Key = key,
+                BucketName = storageKey.Bucket,
+                Key = storageKey.Value,
                 UploadId = uploadId,
                 PartETags = partETags
                     .Select(p => new PartETag
