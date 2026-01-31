@@ -20,6 +20,8 @@ public static class DependencyInjectionExtensions
 
         services.AddCore(configuration);
 
+        services.AddInfrastructurePostgres(configuration);
+
         return services;
     }
 

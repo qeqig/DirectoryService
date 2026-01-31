@@ -29,6 +29,6 @@ public sealed record FileName
 
         string extension = fileName[(lastDot + 1)..].ToLowerInvariant();
 
-        return GeneralErrors.ValueIsInvalid(extension);
+        return new FileName(fileName, extension);
     }
 }

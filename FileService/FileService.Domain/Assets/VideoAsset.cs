@@ -23,8 +23,9 @@ public class VideoAsset : MediaAsset
         MediaData mediaData,
         MediaStatus status,
         MediaOwner mediaOwner,
-        StorageKey key)
-        : base(id, mediaData, status, AssetType.VIDEO, mediaOwner, key)
+        StorageKey rawKey,
+        StorageKey finalKey)
+        : base(id, mediaData, status, AssetType.VIDEO, mediaOwner, rawKey, finalKey)
     {
     }
 
@@ -53,7 +54,7 @@ public class VideoAsset : MediaAsset
         if (key.IsFailure)
             return key.Error;
 
-        return new VideoAsset(id, mediaData, MediaStatus.UPLOADING, owner, key.Value);
+        return new VideoAsset(id, mediaData, MediaStatus.UPLOADING, owner, key.Value, null);
     }
 
     public UnitResult<Error> CompleteProcessing(DateTime time)

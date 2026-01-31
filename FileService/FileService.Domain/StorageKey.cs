@@ -1,4 +1,5 @@
-﻿using CSharpFunctionalExtensions;
+﻿using System.Text.Json.Serialization;
+using CSharpFunctionalExtensions;
 using Shared.SharedKernel;
 
 namespace FileService.Domain;
@@ -17,6 +18,7 @@ public sealed record StorageKey
 
     private StorageKey() { }
 
+    [JsonConstructor]
     private StorageKey(string bucket, string prefix, string key)
     {
         Bucket = bucket;
@@ -69,7 +71,7 @@ public sealed record StorageKey
             if (normalizedPart.IsFailure)
                 return normalizedPart;
 
-            if(string.IsNullOrEmpty(normalizedPart.Value))
+            if(!string.IsNullOrEmpty(normalizedPart.Value))
                 normalizedParts.Add(normalizedPart.Value);
         }
 
@@ -87,5 +89,15 @@ public sealed record StorageKey
             return GeneralErrors.ValueIsInvalid("key");
 
         return trimmed;
+    }
+
+    public bool IsEmpty()
+    {
+        bool isEmpty = string.IsNullOrWhiteSpace(Key)
+            && string.IsNullOrWhiteSpace(Bucket)
+            && string.IsNullOrWhiteSpace(Value)
+            && string.IsNullOrWhiteSpace(FullPath);
+
+        return isEmpty;
     }
 }

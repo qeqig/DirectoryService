@@ -17,12 +17,11 @@ public abstract class MediaAsset
 
     public DateTime UpdatedAt { get; protected set; } = DateTime.UtcNow;
 
-    public StorageKey RawKey { get; protected set; } = null!;
+    public StorageKey? RawKey { get; protected set; }
 
-    public StorageKey FinalKey { get; protected set; } = null!;
+    public StorageKey? FinalKey { get; protected set; }
 
     public MediaOwner Owner { get; protected set; } = null!;
-
 
     protected MediaAsset() { }
 
@@ -32,7 +31,8 @@ public abstract class MediaAsset
         MediaStatus status,
         AssetType assetType,
         MediaOwner owner,
-        StorageKey rawKey)
+        StorageKey? rawKey,
+        StorageKey? finalKey)
     {
         Id = id;
         MediaData = mediaData;
@@ -40,6 +40,7 @@ public abstract class MediaAsset
         AssetType = assetType;
         Owner = owner;
         RawKey = rawKey;
+        FinalKey = finalKey;
     }
 
     public UnitResult<Error> MarkUploaded(DateTime time)
@@ -82,6 +83,26 @@ public abstract class MediaAsset
         UpdatedAt = DateTime.UtcNow;
 
         return UnitResult.Success<Error>();
+    }
+
+    public static Result<MediaAsset, Error> CreateForUpload(MediaData mediaData, AssetType assetType)
+    {
+        var assetId = Guid.NewGuid();
+        var mediaOwnerResult = MediaOwner.ForDepartment(Guid.NewGuid());
+        if (mediaOwnerResult.IsFailure) return mediaOwnerResult.Error;
+        var mediaOwner = mediaOwnerResult.Value;
+
+        switch (assetType)
+        {
+            case AssetType.VIDEO:
+                var videoResult = VideoAsset.CreateForUpload(assetId, mediaData, mediaOwner);
+                return videoResult.IsFailure ? Result.Failure<MediaAsset, Error>(videoResult.Error) : Result.Success<MediaAsset, Error>(videoResult.Value);
+            case AssetType.PREVIEW:
+                var previewResult = PreviewAsset.CreateForUpload(assetId, mediaData, mediaOwner);
+                return previewResult.IsFailure ? Result.Failure<MediaAsset, Error>(previewResult.Error) : Result.Success<MediaAsset, Error>(previewResult.Value);
+
+            default: throw new ArgumentOutOfRangeException(nameof(assetType), assetType, null);
+        }
     }
 }
 

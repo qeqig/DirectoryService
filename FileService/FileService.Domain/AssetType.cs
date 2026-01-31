@@ -13,10 +13,9 @@ public static class AssetTypeExtensions
     {
         return value switch
         {
-            "video" => AssetType.VIDEO,
-            "preview" => AssetType.PREVIEW,
-            "avatar" => AssetType.AVATAR,
-            _ => throw new ArgumentException($"Invalid asset type: {value}"),
+            _ when value.Contains("video", StringComparison.InvariantCultureIgnoreCase) => AssetType.VIDEO,
+            _ when value.Contains("image", StringComparison.InvariantCultureIgnoreCase) => AssetType.PREVIEW,
+            _ => throw new ArgumentException("not found AssetType!"),
         };
     }
 }
