@@ -1,4 +1,5 @@
 using Core.Abstractions;
+using FileService.Core.Features;
 using FluentValidation;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -17,6 +18,8 @@ public static class DependencyInjectionCoreExtensions
                 .AssignableToAny(typeof(ICommandHandler<,>), typeof(ICommandHandler<>), typeof(IQueryHandler<,>)))
             .AsSelfWithInterfaces()
             .WithScopedLifetime());
+
+        services.AddScoped<GetChunkUploadUrlHandler>();
 
         return services;
     }

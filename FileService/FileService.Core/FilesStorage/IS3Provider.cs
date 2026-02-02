@@ -3,16 +3,16 @@ using FileService.Contracts;
 using FileService.Domain;
 using Shared.SharedKernel;
 
-namespace FileService.Core;
+namespace FileService.Core.FilesStorage;
 
 public interface IS3Provider
 {
     Task<Result<string, Error>> StartMultipartUploadAsync(
         StorageKey storageKey,
-        string contentType,
+        MediaData mediaData,
         CancellationToken cancellationToken = default);
 
-    Task<Result<IReadOnlyList<string>, Error>> GenerateAllChunksUploadUrlsAsync(
+    Task<Result<IReadOnlyList<ChunkUploadUrl>, Error>> GenerateAllChunksUploadUrlsAsync(
         StorageKey storageKey,
         string uploadId,
         int totalChunks,
@@ -38,4 +38,15 @@ public interface IS3Provider
         StorageKey storageKey, MediaData mediaData, CancellationToken cancellationToken = default);
 
     Task<Result<IReadOnlyList<string>, Error>> GenerateDownloadUrlsAsync(IEnumerable<StorageKey> storageKeys);
+
+    Task<UnitResult<Error>> AbortMultipartUploadAsync(
+        StorageKey storageKey,
+        string uploadId,
+        CancellationToken cancellationToken);
+
+    Task<Result<string, Error>> GenerateChunkUploadUrl(
+        StorageKey storageKey,
+        string uploadId,
+        int partNumber,
+        CancellationToken cancellationToken);
 }

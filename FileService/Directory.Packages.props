@@ -14,6 +14,7 @@
     <PackageVersion Include="Microsoft.Extensions.Options" Version="10.0.2" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="9.0.4" />
     <PackageVersion Include="qeqig.Core" Version="0.0.1" />
+    <PackageVersion Include="qeqig.core" Version="0.0.2" />
     <PackageVersion Include="qeqig.Framefork" Version="0.0.3" />
     <PackageVersion Include="qeqig.framefork" Version="0.0.2" />
     <PackageVersion Include="qeqig.sharedkernel" Version="0.0.2" />

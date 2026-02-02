@@ -1,6 +1,7 @@
 using Core.Abstractions;
 using Core.Validation;
 using CSharpFunctionalExtensions;
+using FileService.Core.FilesStorage;
 using FluentValidation;
 using Framework.EndpointResults;
 using Microsoft.AspNetCore.Builder;
