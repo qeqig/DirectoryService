@@ -2,11 +2,13 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using CSharpFunctionalExtensions;
 using FileService.Contracts;
-using FileService.Core;
+using FileService.Core.FilesStorage;
 using FileService.Domain;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Shared.SharedKernel;
+using AbortMultipartUploadRequest = Amazon.S3.Model.AbortMultipartUploadRequest;
+using CompleteMultipartUploadRequest = Amazon.S3.Model.CompleteMultipartUploadRequest;
 
 namespace FileService.Infrastructure.S3;
 
@@ -28,7 +30,7 @@ public class S3Provider : IS3Provider
 
     public async Task<Result<string, Error>> StartMultipartUploadAsync(
         StorageKey storageKey,
-        string contentType,
+        MediaData mediaData,
         CancellationToken cancellationToken = default)
     {
         try
@@ -37,7 +39,7 @@ public class S3Provider : IS3Provider
             {
                 BucketName = storageKey.Bucket,
                 Key = storageKey.Key,
-                ContentType = contentType,
+                ContentType = mediaData.ContentType.Value,
             };
 
             var result = await _s3Client.InitiateMultipartUploadAsync(request, cancellationToken);
@@ -51,7 +53,7 @@ public class S3Provider : IS3Provider
         }
     }
 
-    public async Task<Result<IReadOnlyList<string>, Error>> GenerateAllChunksUploadUrlsAsync(
+    public async Task<Result<IReadOnlyList<ChunkUploadUrl>, Error>> GenerateAllChunksUploadUrlsAsync(
         StorageKey storageKey,
         string uploadId,
         int totalChunks,
@@ -79,7 +81,7 @@ public class S3Provider : IS3Provider
 
                         string? url = await _s3Client.GetPreSignedURLAsync(request);
 
-                        return url;
+                        return new ChunkUploadUrl(partNumber, url);
                     }
                     finally
                     {
@@ -87,7 +89,7 @@ public class S3Provider : IS3Provider
                     }
                 });
 
-            string[] results = await Task.WhenAll(tasks);
+            var results = await Task.WhenAll(tasks);
 
             return results;
 
@@ -274,4 +276,53 @@ public class S3Provider : IS3Provider
         }
     }
 
+    public async Task<UnitResult<Error>> AbortMultipartUploadAsync(
+        StorageKey storageKey,
+        string uploadId,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var request = new AbortMultipartUploadRequest
+            {
+                Key = storageKey.Value, BucketName = storageKey.Bucket, UploadId = uploadId,
+            };
+
+            await _s3Client.AbortMultipartUploadAsync(request, cancellationToken);
+
+            return UnitResult.Success<Error>();
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error aborting multipart upload");
+            return UnitResult.Failure<Error>(S3ErrorMapper.ToError(ex));
+        }
+    }
+
+    public async Task<Result<string, Error>> GenerateChunkUploadUrl(
+        StorageKey storageKey,
+        string uploadId,
+        int partNumber,
+        CancellationToken cancellationToken)
+    {
+        try
+        {
+            var request = new GetPreSignedUrlRequest()
+            {
+                Verb = HttpVerb.PUT,
+                PartNumber = partNumber,
+                UploadId = uploadId,
+                Expires = DateTime.UtcNow.AddHours(_s3Options.UploadUrlExpirationHours),
+            };
+
+            var url = await _s3Client.GetPreSignedURLAsync(request);
+
+            return url;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Error generating chunk upload url");
+            return S3ErrorMapper.ToError(ex);
+        }
+    }
 }
