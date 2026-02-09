@@ -1,7 +1,5 @@
+import LocationsList from "@/features/locations/locations-list";
+
 export default function LocationsPage() {
-    return (
-        <div>
-            <span>Locations</span>
-        </div>
-    );
+    return <LocationsList />;
 }
