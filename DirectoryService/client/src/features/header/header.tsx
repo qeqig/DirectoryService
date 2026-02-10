@@ -1,9 +1,13 @@
 import Image from "next/image";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import {
+    Avatar,
+    AvatarFallback,
+    AvatarImage,
+} from "@/shared/components/ui/avatar";
 import Link from "next/link";
 import { routes } from "@/shared/routes";
-import { SidebarTrigger } from "@/components/ui/sidebar";
-import { Separator } from "@/components/ui/separator";
+import { SidebarTrigger } from "@/shared/components/ui/sidebar";
+import { Separator } from "@/shared/components/ui/separator";
 
 export default function Header() {
     return (

@@ -1,4 +1,5 @@
 ﻿using DirectoryService.Application;
+using Framework.Middlewares;
 
 namespace DirectoryService.Presentation;
 
@@ -8,7 +9,8 @@ public static class DependencyInjection
     {
         services
             .AddWebDependencies()
-            .AddApplication();
+            .AddApplication()
+            .AddCors();
 
         return services;
     }
@@ -19,6 +21,18 @@ public static class DependencyInjection
         services.AddOpenApi();
 
         return services;
+    }
+
+    public static IApplicationBuilder AddConfigure(this WebApplication app)
+    {
+        app.UseExceptionMiddleware();
+
+        app.UseCors(builder => builder.WithOrigins("http://localhost:3000")
+            .AllowCredentials()
+            .AllowAnyHeader()
+            .AllowAnyMethod());
+
+        return app;
     }
 
     public static IServiceCollection AddDistributedCache(this IServiceCollection services, IConfiguration configuration)

@@ -29,7 +29,7 @@ try
         app.UseSwaggerUI(option => option.SwaggerEndpoint("/openapi/v1.json", "DirectoryService"));
     }
 
-    app.UseExceptionMiddleware();
+    app.AddConfigure();
 
     app.MapControllers();
 

@@ -14,7 +14,7 @@ import {
     SidebarMenuButton,
     SidebarMenuItem,
     SidebarRail,
-} from "@/components/ui/sidebar";
+} from "@/shared/components/ui/sidebar";
 import { routes } from "@/shared/routes";
 
 const items = [
